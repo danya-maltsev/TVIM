@@ -1,0 +1,1456 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>IVORY FLOWERS — Букеты, созданные с заботой и вкусом</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  --ivory: #FAF7F2;
+  --cream: #F3EDE4;
+  --warm-white: #FFFDF9;
+  --olive: #4A4A42;
+  --olive-light: #6A6A62;
+  --charcoal: #1A1A1A;
+  --text-primary: #1A1A1A;
+  --text-secondary: #555555;
+  --text-muted: #888888;
+  --border-light: rgba(26, 26, 24, 0.08);
+  --border-medium: rgba(26, 26, 24, 0.15);
+
+  --font-display: 'Cormorant Garamond', Georgia, serif;
+  --font-body: 'Manrope', sans-serif;
+
+  --space-xs: 0.5rem;
+  --space-sm: 1rem;
+  --space-md: 1.5rem;
+  --space-lg: 2.5rem;
+  --space-xl: 4rem;
+  --space-2xl: 6rem;
+  --space-3xl: 8rem;
+
+  --container: 1320px;
+  --side-pad: 2.5rem;
+}
+
+/* ================================================================
+   FIX #1 — TILDA FONT COLOR OVERRIDES
+   Forces white text everywhere Tilda injects its default orange/
+   accent color. Covers text blocks, links, buttons, cards, menu
+   items, hover/visited states — everything Tilda might paint orange.
+   ================================================================ */
+
+/* --- All text elements --- */
+.t-text,
+.t-title,
+.t-descr,
+.t-name,
+.t-heading,
+.t-subtitle,
+.t-uptitle,
+.t-card__title,
+.t-card__descr,
+.t-store__card__title,
+.t-store__card__price,
+.t-store__card__btn,
+.t-store__card__descr,
+.t-btn__text,
+[class*="tn-atom"],
+[class*="t-card__"],
+[class*="t-store__card__"],
+.t396__elem .tn-atom,
+.t-col .tn-atom,
+.t-section .tn-atom,
+.t-container .tn-atom,
+.t-col__content .tn-atom,
+.t396 .tn-atom,
+.t-rec .tn-atom {
+  color: #FFFFFF !important;
+}
+
+/* --- All links within Tilda containers --- */
+.t-body a,
+.t-body a:link,
+.t-body a:visited,
+.t-body a:hover,
+.t-body a:active,
+.t-menu__link-item,
+.t-menu__link-item a,
+.t-footer__link,
+.t-footer a,
+[class*="tn-atom"] a,
+[class*="tn-atom"] a:link,
+[class*="tn-atom"] a:visited,
+[class*="tn-atom"] a:hover,
+.tn-atom a,
+.tn-atom a:link,
+.tn-atom a:visited,
+.tn-atom a:hover,
+.t-sociallinks__item a,
+.t-rec a,
+.t-rec a:link,
+.t-rec a:visited,
+.t-rec a:hover,
+.t-col a,
+.t-col a:link,
+.t-col a:visited,
+.t-col a:hover,
+.t-container a,
+.t-container a:link,
+.t-container a:visited,
+.t-container a:hover,
+.t-section a,
+.t-section a:link,
+.t-section a:visited,
+.t-section a:hover,
+.t396 a,
+.t396 a:link,
+.t396 a:visited,
+.t396 a:hover {
+  color: #FFFFFF !important;
+}
+
+/* --- Tilda buttons --- */
+.t-submit,
+.t-btn,
+.t-btn a,
+.t-btn__text,
+.t-form__submit button,
+.t-body [class*="t-btn"],
+.t-store__card__btn a,
+.t-store__card__btn {
+  color: #FFFFFF !important;
+}
+
+/* --- Override inline styles Tilda injects via style="" attribute --- */
+.t-body [style*="color"],
+.t-body a[style*="color"],
+.t-rec [style*="color"],
+.t-rec a[style*="color"] {
+  color: #FFFFFF !important;
+}
+
+/* --- Font family override --- */
+.t-body,
+.t-body .t-text,
+.t-body .t-title,
+.t-body .t-descr,
+.t-body .t-name,
+.t-body .t-heading,
+.t-body .t-subtitle,
+.t-body .tn-atom,
+.t-body a {
+  font-family: var(--font-body) !important;
+}
+
+/* ================================================================
+   SAFEGUARD: Re-assert dark colors on our own light-background
+   components that Tilda's white !important overrides may break.
+   These must come AFTER the Tilda block to win the cascade.
+   ================================================================ */
+.site-header a,
+.site-header a:link,
+.site-header a:visited,
+.hero-content a:not(.btn-primary),
+.hero-content a:link:not(.btn-primary),
+.hero-content a:visited:not(.btn-primary),
+.hero-content p,
+.hero-content h1,
+.hero-content .hero-label,
+.hero-content .hero-desc,
+.catalog-teaser a,
+.catalog-teaser a:link,
+.catalog-teaser a:visited,
+.catalog-teaser p,
+.catalog-teaser h2,
+.catalog-teaser span,
+.about-section a,
+.about-section p,
+.about-section h2,
+.process-section a,
+.process-section p,
+.process-section h2,
+.process-section h3,
+.hero-product-card,
+.hero-product-card a,
+.hero-product-card .card-name,
+.hero-product-card .card-price,
+.hero-product-card .card-link {
+  color: #1A1A1A !important;
+}
+
+/* btn-primary must stay white on dark background */
+.hero-content .btn-primary,
+.hero-content .btn-primary:link,
+.hero-content .btn-primary:visited,
+.hero-content .btn-primary:hover,
+.hero-content .btn-primary:active,
+.hero-content .btn-primary .arrow {
+  color: #FFFFFF !important;
+}
+
+/* Muted text on light backgrounds */
+.hero-label,
+.hero-desc,
+.catalog-header-right .section-desc,
+.about-right .about-text,
+.about-left .about-subtitle,
+.process-header .section-subtitle,
+.step-desc,
+.catalog-header-left .section-label,
+.about-left .section-label,
+.process-header .section-label {
+  color: #555555 !important;
+}
+/* Olive accent stays for italic title */
+.hero-title em {
+  color: var(--olive) !important;
+}
+
+html {
+  scroll-behavior: smooth;
+  font-size: 16px;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--ivory);
+  color: var(--text-primary);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+}
+
+.container {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--side-pad);
+}
+
+a { color: inherit; text-decoration: none; }
+img { display: block; max-width: 100%; }
+
+/* ========== PRELOADER ========== */
+.preloader {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  background: var(--ivory);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: opacity 0.6s ease, visibility 0.6s ease;
+}
+.preloader.hidden {
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+}
+.preloader-logo {
+  font-family: var(--font-display);
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: 0.15em;
+  color: var(--text-primary);
+  opacity: 0;
+  animation: preloaderFade 1.2s ease forwards;
+}
+@keyframes preloaderFade {
+  0% { opacity: 0; transform: translateY(8px); }
+  40% { opacity: 1; transform: translateY(0); }
+  80% { opacity: 1; }
+  100% { opacity: 0.3; }
+}
+
+/* ================================================================
+   FIX #2 — HEADER GRID ALIGNMENT
+   ================================================================ */
+.header-wrap {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  background: rgba(250, 247, 242, 0.92);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  transition: background 0.4s ease, backdrop-filter 0.4s ease;
+}
+.header-wrap.scrolled {
+  background: rgba(250, 247, 242, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid var(--border-light);
+}
+
+.site-header {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 1.25rem var(--side-pad);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  transition: padding 0.4s ease;
+}
+.header-wrap.scrolled .site-header {
+  padding-top: 0.8rem;
+  padding-bottom: 0.8rem;
+}
+
+.header-logo {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.header-logo .logo-mark {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  background: var(--olive);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--ivory);
+  font-family: var(--font-display);
+  font-size: 0.85rem;
+  font-weight: 500;
+  letter-spacing: 0.05em;
+}
+.header-logo .logo-text {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+.header-nav {
+  display: flex;
+  align-items: center;
+  gap: 2.5rem;
+}
+.header-nav a,
+.header-nav a:link,
+.header-nav a:visited,
+.header-nav a:hover,
+.header-nav a:active {
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem;
+  font-weight: 500;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1A1A1A !important;
+  transition: color 0.3s ease;
+  position: relative;
+}
+.header-nav a::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: var(--text-primary);
+  transition: width 0.3s ease;
+}
+.header-nav a:hover { color: var(--text-primary); }
+.header-nav a:hover::after { width: 100%; }
+
+/* ================================================================
+   FIX #4 — VK & TELEGRAM ICONS
+   ================================================================ */
+.header-socials {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+.header-socials a,
+.header-socials a:link,
+.header-socials a:visited,
+.header-socials a:hover,
+.header-socials a:active {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(26, 26, 26, 0.3) !important;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1A1A1A !important;
+  transition: all 0.3s ease;
+}
+.header-socials a:hover {
+  border-color: #1A1A1A !important;
+  color: #1A1A1A !important;
+  background: rgba(26, 26, 26, 0.06);
+}
+.header-socials a svg {
+  width: 16px;
+  height: 16px;
+}
+
+/* ================================================================
+   FIX #3a — HERO HEIGHT = 100vh
+   ================================================================ */
+.hero {
+  height: 100vh;
+  max-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0;
+  position: relative;
+  overflow: hidden;
+}
+
+.hero-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5rem 3rem 3rem calc(max(var(--side-pad), (100vw - var(--container)) / 2 + var(--side-pad)));
+}
+
+.hero-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 0.8s forwards;
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
+  font-weight: 300;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: var(--space-md);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1s forwards;
+}
+.hero-title em {
+  font-style: italic;
+  font-weight: 300;
+  color: var(--olive);
+}
+
+.hero-desc {
+  font-family: var(--font-body);
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: var(--text-secondary);
+  max-width: 400px;
+  margin-bottom: var(--space-lg);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.2s forwards;
+}
+
+.hero-actions {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.4s forwards;
+}
+
+.btn-primary,
+.btn-primary:link,
+.btn-primary:visited,
+.btn-primary:hover,
+.btn-primary:active {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.75rem;
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1rem 2.25rem;
+  background: var(--charcoal);
+  color: #FFFFFF !important;
+  border: none;
+  border-radius: 100px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.btn-primary:hover {
+  background: var(--olive);
+  transform: translateY(-1px);
+}
+.btn-primary .arrow { transition: transform 0.3s ease; color: #FFFFFF !important; }
+.btn-primary:hover .arrow { transform: translateX(3px); }
+
+.btn-ghost,
+.btn-ghost:link,
+.btn-ghost:visited,
+.btn-ghost:active {
+  font-family: var(--font-body) !important;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1A1A1A !important;
+  border-bottom: 1.5px solid #1A1A1A !important;
+  padding-bottom: 3px;
+  transition: all 0.3s ease;
+  cursor: pointer;
+}
+.btn-ghost:hover {
+  color: #4A4A42 !important;
+  border-color: #4A4A42 !important;
+}
+
+.hero-visual {
+  position: relative;
+  overflow: hidden;
+}
+.hero-visual .hero-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  animation: heroImgReveal 1.2s ease 0.5s forwards;
+}
+
+/* ================================================================
+   FIX #3b — PRODUCT CARD
+   ================================================================ */
+.hero-product-card {
+  position: absolute;
+  bottom: 2.5rem;
+  left: 2.5rem;
+  background: var(--warm-white);
+  padding: 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  gap: 1.25rem;
+  border-radius: 4px;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
+  opacity: 0;
+  animation: fadeUp 0.8s ease 1.6s forwards;
+  min-width: 260px;
+}
+.hero-product-card .card-img {
+  width: 72px;
+  height: 72px;
+  border-radius: 3px;
+  object-fit: cover;
+  background: var(--cream);
+}
+.hero-product-card .card-info { flex: 1; }
+.hero-product-card .card-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+  margin-bottom: 0.1rem;
+}
+.hero-product-card .card-price {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333333;
+  margin-bottom: 0.4rem;
+}
+.hero-product-card .card-link,
+.hero-product-card .card-link:link,
+.hero-product-card .card-link:visited {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: #1A1A1A !important;
+  transition: color 0.3s ease;
+}
+.hero-product-card .card-link:hover { color: #555555 !important; }
+
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes heroImgReveal {
+  from { opacity: 0; transform: scale(1.05); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* ========== MARQUEE DIVIDER ========== */
+.marquee-section {
+  padding: var(--space-lg) 0;
+  border-top: 1px solid var(--border-light);
+  border-bottom: 1px solid var(--border-light);
+  overflow: hidden;
+}
+.marquee-track {
+  display: flex;
+  animation: marqueeScroll 30s linear infinite;
+  width: max-content;
+}
+.marquee-item {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  padding: 0 2rem;
+  white-space: nowrap;
+}
+.marquee-item span {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+}
+.marquee-item .dot {
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background: var(--text-muted);
+  flex-shrink: 0;
+}
+@keyframes marqueeScroll {
+  0% { transform: translateX(0); }
+  100% { transform: translateX(-50%); }
+}
+
+/* ========== CATALOG TEASER ========== */
+.catalog-teaser { padding: var(--space-3xl) 0; }
+.catalog-header {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  margin-bottom: var(--space-xl);
+}
+.catalog-header-left .section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+.catalog-header-left .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 400;
+  letter-spacing: -0.01em;
+}
+.catalog-header-right .section-desc {
+  font-size: 0.875rem;
+  color: var(--text-secondary);
+  max-width: 320px;
+  text-align: right;
+  line-height: 1.7;
+}
+
+.catalog-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1.5rem;
+  margin-bottom: var(--space-xl);
+}
+
+.product-card {
+  position: relative;
+  overflow: hidden;
+  border-radius: 4px;
+  background: var(--cream);
+  cursor: pointer;
+}
+.product-card .card-image-wrap {
+  position: relative;
+  aspect-ratio: 3/4;
+  overflow: hidden;
+}
+.product-card .card-image-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s ease;
+}
+.product-card:hover .card-image-wrap img { transform: scale(1.04); }
+.product-card .card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(26,26,24,0.3) 0%, transparent 50%);
+  opacity: 0;
+  transition: opacity 0.4s ease;
+}
+.product-card:hover .card-overlay { opacity: 1; }
+.product-card .card-body {
+  padding: 1.25rem 1.25rem 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.product-card .card-body .product-name {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 500;
+}
+.product-card .card-body .product-price {
+  font-family: var(--font-body);
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: #333333;
+}
+
+.catalog-cta { text-align: center; }
+.catalog-cta .btn-outline {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-family: var(--font-body);
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  padding: 1rem 2.5rem;
+  border: 1px solid var(--charcoal);
+  border-radius: 100px;
+  background: none;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+.catalog-cta .btn-outline:hover {
+  background: var(--charcoal);
+  color: var(--ivory);
+}
+
+/* ========== ABOUT SECTION ========== */
+.about-section {
+  padding: var(--space-3xl) 0;
+  background: var(--warm-white);
+}
+.about-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--side-pad);
+}
+.about-top {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: start;
+  margin-bottom: var(--space-3xl);
+}
+.about-left .section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-md);
+}
+.about-left .about-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: var(--space-md);
+}
+.about-left .about-subtitle {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+.about-right { padding-top: 1rem; }
+.about-right .about-text {
+  font-size: 0.9rem;
+  line-height: 1.85;
+  color: var(--text-secondary);
+  margin-bottom: var(--space-lg);
+}
+.about-right .about-highlight {
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--text-primary);
+  padding-left: 1.5rem;
+  border-left: 2px solid var(--olive);
+}
+
+.about-images {
+  display: grid;
+  grid-template-columns: 1.2fr 0.8fr;
+  gap: 1.5rem;
+  max-height: 480px;
+}
+.about-images .about-img {
+  border-radius: 4px;
+  overflow: hidden;
+}
+.about-images .about-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.8s ease;
+}
+.about-images .about-img:hover img { transform: scale(1.03); }
+
+/* ========== HOW WE WORK ========== */
+.process-section { padding: var(--space-3xl) 0; }
+.process-header {
+  text-align: center;
+  margin-bottom: var(--space-2xl);
+}
+.process-header .section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  margin-bottom: var(--space-sm);
+}
+.process-header .section-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 400;
+}
+.process-header .section-subtitle {
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+  margin-top: var(--space-sm);
+  max-width: 480px;
+  margin-left: auto;
+  margin-right: auto;
+  line-height: 1.7;
+}
+
+.process-grid {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0;
+  position: relative;
+}
+.process-grid::before {
+  content: '';
+  position: absolute;
+  top: 2.75rem;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: var(--border-medium);
+}
+
+.process-step {
+  text-align: center;
+  padding: 0 1.25rem;
+  position: relative;
+}
+.step-number {
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  background: var(--ivory);
+  border: 1px solid var(--border-medium);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin: 0 auto var(--space-lg);
+  font-family: var(--font-display);
+  font-size: 1.3rem;
+  font-weight: 500;
+  color: var(--olive);
+  position: relative;
+  z-index: 2;
+  transition: all 0.3s ease;
+}
+.process-step:hover .step-number {
+  background: var(--olive);
+  border-color: var(--olive);
+  color: var(--ivory);
+}
+.step-title {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.step-desc {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: var(--text-secondary);
+}
+
+/* ========== CONTACTS ========== */
+.contact-section {
+  padding: var(--space-3xl) 0;
+  background: var(--charcoal);
+  color: var(--ivory);
+  position: relative;
+  overflow: hidden;
+}
+.contact-section::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  right: -10%;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(92, 90, 60, 0.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+.contact-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--side-pad);
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-3xl);
+  align-items: center;
+}
+.contact-left .section-label {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 242, 0.4);
+  margin-bottom: var(--space-md);
+}
+.contact-left .contact-title {
+  font-family: var(--font-display);
+  font-size: clamp(2.5rem, 4vw, 3.5rem);
+  font-weight: 400;
+  line-height: 1.1;
+  margin-bottom: var(--space-lg);
+}
+.contact-left .contact-desc {
+  font-size: 0.9rem;
+  line-height: 1.75;
+  color: rgba(250, 247, 242, 0.6);
+  max-width: 380px;
+}
+.contact-details {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+.contact-item {
+  display: flex;
+  align-items: flex-start;
+  gap: 1.25rem;
+}
+.contact-icon {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 1px solid rgba(250, 247, 242, 0.12);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.contact-icon svg {
+  width: 18px;
+  height: 18px;
+  stroke: rgba(250, 247, 242, 0.6);
+}
+.contact-item .contact-label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 242, 0.35);
+  margin-bottom: 0.35rem;
+}
+.contact-item .contact-value {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 400;
+  color: rgba(250, 247, 242, 0.85);
+  line-height: 1.5;
+}
+.contact-item .contact-value a { transition: color 0.3s ease; }
+.contact-item .contact-value a:hover { color: var(--ivory); }
+
+/* ========== FOOTER ========== */
+.site-footer {
+  background: var(--charcoal);
+  border-top: 1px solid rgba(250, 247, 242, 0.06);
+  padding: var(--space-2xl) 0 var(--space-lg);
+  color: var(--ivory);
+}
+.footer-inner {
+  max-width: var(--container);
+  margin: 0 auto;
+  padding: 0 var(--side-pad);
+}
+.footer-top {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
+  gap: 2rem;
+  padding-bottom: var(--space-2xl);
+  border-bottom: 1px solid rgba(250, 247, 242, 0.06);
+}
+.footer-brand .footer-logo {
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-bottom: 0.75rem;
+}
+.footer-brand .footer-tagline {
+  font-size: 0.8rem;
+  line-height: 1.65;
+  color: rgba(250, 247, 242, 0.4);
+  max-width: 240px;
+}
+.footer-col .footer-col-title {
+  font-family: var(--font-body);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(250, 247, 242, 0.35);
+  margin-bottom: 1.25rem;
+}
+.footer-col ul {
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+}
+.footer-col ul li a {
+  font-size: 0.85rem;
+  color: rgba(250, 247, 242, 0.55);
+  transition: color 0.3s ease;
+}
+.footer-col ul li a:hover { color: var(--ivory); }
+
+.footer-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: var(--space-lg);
+}
+.footer-copy {
+  font-size: 0.75rem;
+  color: rgba(250, 247, 242, 0.25);
+}
+.footer-socials {
+  display: flex;
+  gap: 1rem;
+}
+.footer-socials a {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  border: 1px solid rgba(250, 247, 242, 0.1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: rgba(250, 247, 242, 0.4);
+  transition: all 0.3s ease;
+}
+.footer-socials a:hover {
+  border-color: rgba(250, 247, 242, 0.3);
+  color: var(--ivory);
+}
+
+/* ========== SCROLL REVEAL ========== */
+.reveal {
+  opacity: 0;
+  transform: translateY(30px);
+  transition: opacity 0.8s ease, transform 0.8s ease;
+}
+.reveal.visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+.reveal-delay-1 { transition-delay: 0.1s; }
+.reveal-delay-2 { transition-delay: 0.2s; }
+.reveal-delay-3 { transition-delay: 0.3s; }
+.reveal-delay-4 { transition-delay: 0.4s; }
+.reveal-delay-5 { transition-delay: 0.5s; }
+
+/* ========== RESPONSIVE ========== */
+@media (max-width: 1024px) {
+  .hero {
+    grid-template-columns: 1fr;
+    height: auto;
+    max-height: none;
+  }
+  .hero-content {
+    padding: 7rem var(--side-pad) 3rem;
+    max-width: 100%;
+    margin-left: 0;
+  }
+  .hero-visual { height: 55vh; }
+  .hero-product-card { left: 1.5rem; bottom: 1.5rem; }
+  .catalog-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-top { grid-template-columns: 1fr; gap: var(--space-xl); }
+  .process-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
+  .process-grid::before { display: none; }
+  .contact-inner { grid-template-columns: 1fr; gap: var(--space-xl); }
+  .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
+}
+
+@media (max-width: 768px) {
+  :root { --side-pad: 1.5rem; }
+  .header-nav { display: none; }
+  .hero-content { padding: 6rem var(--side-pad) 2rem; }
+  .hero-title { font-size: 2.8rem; }
+  .catalog-grid { grid-template-columns: 1fr; }
+  .about-images { grid-template-columns: 1fr; max-height: none; }
+  .process-grid { grid-template-columns: 1fr 1fr; }
+  .footer-top { grid-template-columns: 1fr; }
+  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+}
+</style>
+</head>
+<body>
+
+<!-- PRELOADER -->
+<div class="preloader" id="preloader">
+  <div class="preloader-logo">IVORY FLOWERS</div>
+</div>
+
+<!-- HEADER -->
+<div class="header-wrap" id="headerWrap">
+  <header class="site-header">
+    <div class="header-logo">
+      <span class="logo-text">Ivory Flowers</span>
+    </div>
+    <nav class="header-nav">
+      <a href="#catalog">Цветы</a>
+      <a href="#catalog">Каталог</a>
+      <a href="#about">О нас</a>
+      <a href="#contact">Контакты</a>
+    </nav>
+    <div class="header-socials">
+      <a href="#" aria-label="VK">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.547 7H16.5a.5.5 0 00-.5.5v0a6.5 6.5 0 01-1.5 4.2c-.5.5-1 .8-1.5.8s-.7-.2-.7-.8V7.5a.5.5 0 00-.5-.5H8.5a.5.5 0 00-.4.8l.1.2c.5.7.8 1.5.8 2.5v2.3c0 .5-.1.8-.3 1s-.4.3-.7.3-.7-.2-1.2-.7A8.5 8.5 0 015 8.2a.5.5 0 00-.5-.3H2.5a.5.5 0 00-.5.6c1 5 4.5 9.5 10 9.5h1.5a.5.5 0 00.5-.5v-1.7a1 1 0 011-.9c.5 0 1 .3 1.7 1.1l2.1 2.5a.5.5 0 00.4.2h3.3a.5.5 0 00.4-.8l-2.5-3a.5.5 0 010-.6c1-1.2 2-2.8 2.5-4.5a.5.5 0 00-.5-.7z"/></svg>
+      </a>
+      <a href="#" aria-label="Telegram">
+        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg>
+      </a>
+    </div>
+  </header>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <p class="hero-label">Флористическая студия в Санкт-Петербурге</p>
+    <h1 class="hero-title">Букеты,<br>созданные<br>с <em>заботой</em></h1>
+    <p class="hero-desc">Свежие цветы, стильные композиции и быстрая доставка по городу. Соберём букет под ваш повод — от нежных композиций до премиальных подарочных сборок.</p>
+    <div class="hero-actions">
+      <a href="#catalog" class="btn-primary">В каталог <span class="arrow">→</span></a>
+      <a href="#about" class="btn-ghost">Подробнее</a>
+    </div>
+  </div>
+  <div class="hero-visual">
+    <img class="hero-img" src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=900&h=1200&fit=crop&crop=center" alt="Elegant bouquet of ivory roses" loading="eager">
+    <div class="hero-product-card">
+      <img class="card-img" src="https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=200&h=200&fit=crop" alt="Роза Айвори">
+      <div class="card-info">
+        <div class="card-name">Роза Айвори</div>
+        <div class="card-price">1 999 ₽</div>
+        <a href="#" class="card-link">Подробнее →</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- MARQUEE -->
+<div class="marquee-section">
+  <div class="marquee-track">
+    <div class="marquee-item"><span>Розы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Тюльпаны</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Пионы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Гладиолусы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Ромашки</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Композиции</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Сухоцветы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Аксессуары</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Розы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Тюльпаны</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Пионы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Гладиолусы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Ромашки</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Композиции</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Сухоцветы</span><div class="dot"></div></div>
+    <div class="marquee-item"><span>Аксессуары</span><div class="dot"></div></div>
+  </div>
+</div>
+
+<!-- CATALOG TEASER -->
+<section class="catalog-teaser" id="catalog">
+  <div class="container">
+    <div class="catalog-header reveal">
+      <div class="catalog-header-left">
+        <p class="section-label">Наши цветы</p>
+        <h2 class="section-title">Каталог</h2>
+      </div>
+      <div class="catalog-header-right">
+        <p class="section-desc">Букеты, созданные с заботой и вкусом — от классических роз до авторских композиций</p>
+      </div>
+    </div>
+    <div class="catalog-grid">
+      <div class="product-card reveal reveal-delay-1">
+        <div class="card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&h=800&fit=crop" alt="Роза Айвори" loading="lazy">
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <span class="product-name">Роза Айвори</span>
+          <span class="product-price">1 999 ₽</span>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-2">
+        <div class="card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=600&h=800&fit=crop" alt="Букет Нежность" loading="lazy">
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <span class="product-name">Букет Нежность</span>
+          <span class="product-price">3 499 ₽</span>
+        </div>
+      </div>
+      <div class="product-card reveal reveal-delay-3">
+        <div class="card-image-wrap">
+          <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&h=800&fit=crop" alt="Тюльпаны Микс" loading="lazy">
+          <div class="card-overlay"></div>
+        </div>
+        <div class="card-body">
+          <span class="product-name">Тюльпаны Микс</span>
+          <span class="product-price">2 499 ₽</span>
+        </div>
+      </div>
+    </div>
+    <div class="catalog-cta reveal">
+      <a href="#" class="btn-outline">Смотреть всё <span>→</span></a>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about-section" id="about">
+  <div class="about-inner">
+    <div class="about-top">
+      <div class="about-left reveal">
+        <p class="section-label">О нас</p>
+        <h2 class="about-title">Студия, создающая букеты, которые остаются в памяти</h2>
+        <p class="about-subtitle">Эстетика, свежесть и внимание к каждой детали</p>
+      </div>
+      <div class="about-right reveal reveal-delay-2">
+        <p class="about-text">IVORY FLOWERS — это студия, в которой мы соединяем эстетику, свежесть и внимание к деталям. Мы создаём букеты, которые передают эмоции, настроение и атмосферу вашего повода.</p>
+        <p class="about-text">Наши флористы работают только с качественными цветами и продумывают каждую композицию так, чтобы она радовала как можно дольше.</p>
+        <p class="about-highlight">Каждый букет — это история, рассказанная языком цветов</p>
+      </div>
+    </div>
+    <div class="about-images reveal">
+      <div class="about-img">
+        <img src="https://optim.tildacdn.com/tild3730-3961-4665-a562-323065306462/-/format/webp/299087b4508f389e59a2.png.webp" alt="Флористическая студия" loading="lazy">
+      </div>
+      <div class="about-img">
+        <img src="https://optim.tildacdn.com/tild3135-6133-4763-b937-333764626562/-/format/webp/7ac20620468974673b12.png.webp" alt="Работа флориста" loading="lazy">
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- HOW WE WORK -->
+<section class="process-section">
+  <div class="container">
+    <div class="process-header reveal">
+      <p class="section-label">Процесс</p>
+      <h2 class="section-title">Как мы работаем</h2>
+      <p class="section-subtitle">Мы сделали процесс покупки удобным и прозрачным</p>
+    </div>
+    <div class="process-grid">
+      <div class="process-step reveal reveal-delay-1">
+        <div class="step-number">1</div>
+        <h3 class="step-title">Выбираете букет</h3>
+        <p class="step-desc">В каталоге или с помощью нашего флориста</p>
+      </div>
+      <div class="process-step reveal reveal-delay-2">
+        <div class="step-number">2</div>
+        <h3 class="step-title">Оформляете заказ</h3>
+        <p class="step-desc">Указываете адрес и удобное время доставки</p>
+      </div>
+      <div class="process-step reveal reveal-delay-3">
+        <div class="step-number">3</div>
+        <h3 class="step-title">Собираем букет</h3>
+        <p class="step-desc">Только из свежих цветов в выбранном стиле</p>
+      </div>
+      <div class="process-step reveal reveal-delay-4">
+        <div class="step-number">4</div>
+        <h3 class="step-title">Доставка</h3>
+        <p class="step-desc">В течение 1–2 часов, аккуратно и точно в срок</p>
+      </div>
+      <div class="process-step reveal reveal-delay-5">
+        <div class="step-number">5</div>
+        <h3 class="step-title">Радость</h3>
+        <p class="step-desc">Каждый букет упакован красиво и надёжно</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTACTS -->
+<section class="contact-section" id="contact">
+  <div class="contact-inner">
+    <div class="contact-left reveal">
+      <p class="section-label">Свяжитесь с нами</p>
+      <h2 class="contact-title">Если у вас остались вопросы</h2>
+      <p class="contact-desc">Мы всегда рады помочь с выбором букета или ответить на любые вопросы о доставке и оплате</p>
+    </div>
+    <div class="contact-details reveal reveal-delay-2">
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Email</div>
+          <div class="contact-value"><a href="mailto:contact@company.com">contact@company.com</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Телефон</div>
+          <div class="contact-value"><a href="tel:+71234567899">+7 (123) 456 7899</a></div>
+        </div>
+      </div>
+      <div class="contact-item">
+        <div class="contact-icon">
+          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
+        </div>
+        <div>
+          <div class="contact-label">Адрес</div>
+          <div class="contact-value">Санкт-Петербург,<br>ул. Неизвестная, 874632</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="site-footer">
+  <div class="footer-inner">
+    <div class="footer-top">
+      <div class="footer-brand">
+        <div class="footer-logo">Ivory Flowers</div>
+        <p class="footer-tagline">Букеты, созданные с заботой и вкусом. Доставка по Санкт-Петербургу.</p>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Цветы</h4>
+        <ul>
+          <li><a href="#">Розы</a></li>
+          <li><a href="#">Тюльпаны</a></li>
+          <li><a href="#">Гладиолусы</a></li>
+          <li><a href="#">Ромашки</a></li>
+          <li><a href="#">Пионы</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Категории</h4>
+        <ul>
+          <li><a href="#">Букеты</a></li>
+          <li><a href="#">Цветы поштучно</a></li>
+          <li><a href="#">Композиции</a></li>
+          <li><a href="#">Сухоцветы</a></li>
+          <li><a href="#">Аксессуары</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Навигация</h4>
+        <ul>
+          <li><a href="#catalog">Цветы</a></li>
+          <li><a href="#catalog">Каталог</a></li>
+          <li><a href="#about">О нас</a></li>
+          <li><a href="#contact">Контакты</a></li>
+        </ul>
+      </div>
+      <div class="footer-col">
+        <h4 class="footer-col-title">Подписывайтесь</h4>
+        <ul>
+          <li><a href="#">VK</a></li>
+          <li><a href="#">Telegram</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <p class="footer-copy">Copyright &copy; 2025 IVORY FLOWERS | Все права защищены</p>
+      <div class="footer-socials">
+        <a href="#" aria-label="VK">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.547 7H16.5a.5.5 0 00-.5.5v0a6.5 6.5 0 01-1.5 4.2c-.5.5-1 .8-1.5.8s-.7-.2-.7-.8V7.5a.5.5 0 00-.5-.5H8.5a.5.5 0 00-.4.8l.1.2c.5.7.8 1.5.8 2.5v2.3c0 .5-.1.8-.3 1s-.4.3-.7.3-.7-.2-1.2-.7A8.5 8.5 0 015 8.2a.5.5 0 00-.5-.3H2.5a.5.5 0 00-.5.6c1 5 4.5 9.5 10 9.5h1.5a.5.5 0 00.5-.5v-1.7a1 1 0 011-.9c.5 0 1 .3 1.7 1.1l2.1 2.5a.5.5 0 00.4.2h3.3a.5.5 0 00.4-.8l-2.5-3a.5.5 0 010-.6c1-1.2 2-2.8 2.5-4.5a.5.5 0 00-.5-.7z"/></svg>
+        </a>
+        <a href="#" aria-label="Telegram">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Preloader
+window.addEventListener('load', () => {
+  setTimeout(() => {
+    document.getElementById('preloader').classList.add('hidden');
+  }, 1400);
+});
+
+// Header scroll
+const headerWrap = document.getElementById('headerWrap');
+window.addEventListener('scroll', () => {
+  if (window.scrollY > 60) {
+    headerWrap.classList.add('scrolled');
+  } else {
+    headerWrap.classList.remove('scrolled');
+  }
+}, { passive: true });
+
+// Scroll reveal
+const reveals = document.querySelectorAll('.reveal');
+const revealObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      entry.target.classList.add('visible');
+      revealObserver.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
+reveals.forEach(el => revealObserver.observe(el));
+
+// Smooth anchor scroll
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      e.preventDefault();
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  });
+});
+</script>
+
+</body>
+</html>
