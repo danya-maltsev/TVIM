@@ -1,1456 +1,923 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>IVORY FLOWERS — Букеты, созданные с заботой и вкусом</title>
+<title>TVIM — Turning Vision Into Mission</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;0,700;1,300;1,400;1,500&family=Manrope:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Instrument+Serif:ital@0;1&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
 <style>
-*, *::before, *::after {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 :root {
-  --ivory: #FAF7F2;
-  --cream: #F3EDE4;
-  --warm-white: #FFFDF9;
-  --olive: #4A4A42;
-  --olive-light: #6A6A62;
-  --charcoal: #1A1A1A;
-  --text-primary: #1A1A1A;
-  --text-secondary: #555555;
-  --text-muted: #888888;
-  --border-light: rgba(26, 26, 24, 0.08);
-  --border-medium: rgba(26, 26, 24, 0.15);
-
-  --font-display: 'Cormorant Garamond', Georgia, serif;
-  --font-body: 'Manrope', sans-serif;
-
-  --space-xs: 0.5rem;
-  --space-sm: 1rem;
-  --space-md: 1.5rem;
-  --space-lg: 2.5rem;
-  --space-xl: 4rem;
-  --space-2xl: 6rem;
-  --space-3xl: 8rem;
-
-  --container: 1320px;
-  --side-pad: 2.5rem;
+  --white: #ffffff;
+  --off: #f5f4f2;
+  --border: #d8d7d4;
+  --mid: #8a8884;
+  --dark: #1a1917;
+  --black: #0d0d0c;
+  --blue: #2a35ff;
+  --fs-nav: 11px;
+  --fs-h1: clamp(42px, 6vw, 82px);
+  --fs-h2: clamp(32px, 4.5vw, 60px);
 }
-
-/* ================================================================
-   FIX #1 — TILDA FONT COLOR OVERRIDES
-   Forces white text everywhere Tilda injects its default orange/
-   accent color. Covers text blocks, links, buttons, cards, menu
-   items, hover/visited states — everything Tilda might paint orange.
-   ================================================================ */
-
-/* --- All text elements --- */
-.t-text,
-.t-title,
-.t-descr,
-.t-name,
-.t-heading,
-.t-subtitle,
-.t-uptitle,
-.t-card__title,
-.t-card__descr,
-.t-store__card__title,
-.t-store__card__price,
-.t-store__card__btn,
-.t-store__card__descr,
-.t-btn__text,
-[class*="tn-atom"],
-[class*="t-card__"],
-[class*="t-store__card__"],
-.t396__elem .tn-atom,
-.t-col .tn-atom,
-.t-section .tn-atom,
-.t-container .tn-atom,
-.t-col__content .tn-atom,
-.t396 .tn-atom,
-.t-rec .tn-atom {
-  color: #FFFFFF !important;
-}
-
-/* --- All links within Tilda containers --- */
-.t-body a,
-.t-body a:link,
-.t-body a:visited,
-.t-body a:hover,
-.t-body a:active,
-.t-menu__link-item,
-.t-menu__link-item a,
-.t-footer__link,
-.t-footer a,
-[class*="tn-atom"] a,
-[class*="tn-atom"] a:link,
-[class*="tn-atom"] a:visited,
-[class*="tn-atom"] a:hover,
-.tn-atom a,
-.tn-atom a:link,
-.tn-atom a:visited,
-.tn-atom a:hover,
-.t-sociallinks__item a,
-.t-rec a,
-.t-rec a:link,
-.t-rec a:visited,
-.t-rec a:hover,
-.t-col a,
-.t-col a:link,
-.t-col a:visited,
-.t-col a:hover,
-.t-container a,
-.t-container a:link,
-.t-container a:visited,
-.t-container a:hover,
-.t-section a,
-.t-section a:link,
-.t-section a:visited,
-.t-section a:hover,
-.t396 a,
-.t396 a:link,
-.t396 a:visited,
-.t396 a:hover {
-  color: #FFFFFF !important;
-}
-
-/* --- Tilda buttons --- */
-.t-submit,
-.t-btn,
-.t-btn a,
-.t-btn__text,
-.t-form__submit button,
-.t-body [class*="t-btn"],
-.t-store__card__btn a,
-.t-store__card__btn {
-  color: #FFFFFF !important;
-}
-
-/* --- Override inline styles Tilda injects via style="" attribute --- */
-.t-body [style*="color"],
-.t-body a[style*="color"],
-.t-rec [style*="color"],
-.t-rec a[style*="color"] {
-  color: #FFFFFF !important;
-}
-
-/* --- Font family override --- */
-.t-body,
-.t-body .t-text,
-.t-body .t-title,
-.t-body .t-descr,
-.t-body .t-name,
-.t-body .t-heading,
-.t-body .t-subtitle,
-.t-body .tn-atom,
-.t-body a {
-  font-family: var(--font-body) !important;
-}
-
-/* ================================================================
-   SAFEGUARD: Re-assert dark colors on our own light-background
-   components that Tilda's white !important overrides may break.
-   These must come AFTER the Tilda block to win the cascade.
-   ================================================================ */
-.site-header a,
-.site-header a:link,
-.site-header a:visited,
-.hero-content a:not(.btn-primary),
-.hero-content a:link:not(.btn-primary),
-.hero-content a:visited:not(.btn-primary),
-.hero-content p,
-.hero-content h1,
-.hero-content .hero-label,
-.hero-content .hero-desc,
-.catalog-teaser a,
-.catalog-teaser a:link,
-.catalog-teaser a:visited,
-.catalog-teaser p,
-.catalog-teaser h2,
-.catalog-teaser span,
-.about-section a,
-.about-section p,
-.about-section h2,
-.process-section a,
-.process-section p,
-.process-section h2,
-.process-section h3,
-.hero-product-card,
-.hero-product-card a,
-.hero-product-card .card-name,
-.hero-product-card .card-price,
-.hero-product-card .card-link {
-  color: #1A1A1A !important;
-}
-
-/* btn-primary must stay white on dark background */
-.hero-content .btn-primary,
-.hero-content .btn-primary:link,
-.hero-content .btn-primary:visited,
-.hero-content .btn-primary:hover,
-.hero-content .btn-primary:active,
-.hero-content .btn-primary .arrow {
-  color: #FFFFFF !important;
-}
-
-/* Muted text on light backgrounds */
-.hero-label,
-.hero-desc,
-.catalog-header-right .section-desc,
-.about-right .about-text,
-.about-left .about-subtitle,
-.process-header .section-subtitle,
-.step-desc,
-.catalog-header-left .section-label,
-.about-left .section-label,
-.process-header .section-label {
-  color: #555555 !important;
-}
-/* Olive accent stays for italic title */
-.hero-title em {
-  color: var(--olive) !important;
-}
-
-html {
-  scroll-behavior: smooth;
-  font-size: 16px;
-}
-
+html { scroll-behavior: smooth; }
 body {
-  font-family: var(--font-body);
-  background-color: var(--ivory);
-  color: var(--text-primary);
-  line-height: 1.6;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  background: var(--white);
+  color: var(--dark);
+  font-family: 'Archivo', sans-serif;
+  font-size: 13.5px;
+  line-height: 1.5;
   overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
-.container {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 var(--side-pad);
-}
+/* CURSOR */
+.cursor { position: fixed; width: 8px; height: 8px; background: var(--black); border-radius: 50%; pointer-events: none; z-index: 9999; transform: translate(-50%,-50%); transition: transform .1s; }
+.cursor-ring { position: fixed; width: 32px; height: 32px; border: 1px solid rgba(0,0,0,.35); border-radius: 50%; pointer-events: none; z-index: 9998; transform: translate(-50%,-50%); transition: width .3s, height .3s, border-color .3s; }
 
-a { color: inherit; text-decoration: none; }
-img { display: block; max-width: 100%; }
+/* NAV */
+nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; display: flex; align-items: center; justify-content: space-between; padding: 0 32px; height: 48px; background: rgba(255,255,255,.92); backdrop-filter: blur(12px); border-bottom: 1px solid var(--border); }
+.nav-left { display: flex; gap: 28px; align-items: center; }
+.nav-label { font-size: var(--fs-nav); font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); text-decoration: none; transition: color .2s; }
+.nav-label:hover { color: var(--dark); }
+.nav-label.num::before { content: attr(data-n); font-size: 9px; vertical-align: super; margin-right: 3px; opacity: .5; }
+.nav-logo { position: absolute; left: 50%; transform: translateX(-50%); font-size: 13px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; display: flex; align-items: center; gap: 6px; }
+.nav-logo .dot { width: 6px; height: 6px; background: var(--blue); border-radius: 50%; display: inline-block; }
+.nav-right { display: flex; gap: 24px; align-items: center; }
+.btn-nav { font-size: var(--fs-nav); font-weight: 600; letter-spacing: .1em; text-transform: uppercase; text-decoration: none; background: var(--dark); color: var(--white); padding: 7px 16px; border-radius: 2px; transition: background .2s; display: flex; align-items: center; gap: 6px; }
+.btn-nav:hover { background: var(--blue); }
 
-/* ========== PRELOADER ========== */
-.preloader {
-  position: fixed;
-  inset: 0;
-  z-index: 9999;
-  background: var(--ivory);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: opacity 0.6s ease, visibility 0.6s ease;
-}
-.preloader.hidden {
-  opacity: 0;
-  visibility: hidden;
-  pointer-events: none;
-}
-.preloader-logo {
-  font-family: var(--font-display);
-  font-size: 2rem;
-  font-weight: 400;
-  letter-spacing: 0.15em;
-  color: var(--text-primary);
-  opacity: 0;
-  animation: preloaderFade 1.2s ease forwards;
-}
-@keyframes preloaderFade {
-  0% { opacity: 0; transform: translateY(8px); }
-  40% { opacity: 1; transform: translateY(0); }
-  80% { opacity: 1; }
-  100% { opacity: 0.3; }
-}
+/* HERO */
+.hero { margin-top: 48px; display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); min-height: 220px; }
+.hero-left { padding: 48px 40px; border-right: 1px solid var(--border); }
+.hero-left h1 { font-size: var(--fs-h1); font-weight: 800; line-height: 1.0; letter-spacing: -.03em; color: var(--black); }
+.hero-right { padding: 48px 40px; display: flex; flex-direction: column; justify-content: space-between; }
+.hero-desc { font-size: 13px; color: var(--mid); line-height: 1.7; max-width: 280px; }
+.btn-primary { display: inline-flex; align-items: center; gap: 8px; margin-top: 28px; background: var(--dark); color: var(--white); font-size: 12px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; padding: 10px 20px; border-radius: 100px; border: none; cursor: pointer; text-decoration: none; transition: background .2s, gap .2s; width: fit-content; }
+.btn-primary:hover { background: var(--blue); gap: 12px; }
+.hero-meta { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; margin-top: 18px; font-size: 10.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: var(--mid); }
+.hero-meta .dot-sep { color: var(--border); }
 
-/* ================================================================
-   FIX #2 — HEADER GRID ALIGNMENT
-   ================================================================ */
-.header-wrap {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 100;
-  background: rgba(250, 247, 242, 0.92);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: background 0.4s ease, backdrop-filter 0.4s ease;
-}
-.header-wrap.scrolled {
-  background: rgba(250, 247, 242, 0.95);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid var(--border-light);
-}
+/* TICKER */
+.ticker-wrap { border-bottom: 1px solid var(--border); overflow: hidden; white-space: nowrap; background: var(--off); padding: 10px 0; display: flex; align-items: center; }
+.ticker-inner { display: inline-flex; gap: 48px; animation: ticker 28s linear infinite; }
+.ticker-inner span { font-size: 10px; font-weight: 600; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); }
+.ticker-inner span.accent { color: var(--blue); }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 
-.site-header {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 1.25rem var(--side-pad);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  transition: padding 0.4s ease;
-}
-.header-wrap.scrolled .site-header {
-  padding-top: 0.8rem;
-  padding-bottom: 0.8rem;
-}
+/* SPLIT GRID */
+.split-grid { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); min-height: 520px; }
+.split-cell { position: relative; overflow: hidden; border-right: 1px solid var(--border); }
+.split-cell:last-child { border-right: none; }
+.cell-tag { position: absolute; top: 20px; left: 20px; font-size: 10px; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; background: rgba(255,255,255,.85); backdrop-filter: blur(4px); padding: 4px 10px; border-radius: 100px; border: 1px solid var(--border); z-index: 2; }
+.cell-dark { background: var(--black); display: flex; flex-direction: column; justify-content: flex-end; padding: 32px; }
+.cell-dark .cell-tag { background: rgba(255,255,255,.12); color: rgba(255,255,255,.7); border-color: rgba(255,255,255,.15); }
+.cell-dark-visual { position: absolute; inset: 0; background: radial-gradient(ellipse 80% 60% at 50% 60%, #1e2a6e 0%, #0a0f2e 50%, #000 100%); overflow: hidden; }
+.cell-dark-visual::before { content: ''; position: absolute; inset: 0; background: repeating-linear-gradient(0deg, transparent, transparent 1px, rgba(255,255,255,.025) 1px, rgba(255,255,255,.025) 2px); background-size: 100% 40px; }
+.morph-shape { position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 340px; height: 340px; background: linear-gradient(135deg, #2a35ff 0%, #6a3de8 50%, #1a1060 100%); border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; animation: morph 8s ease-in-out infinite; opacity: .7; filter: blur(1px); }
+.morph-shape::after { content: ''; position: absolute; inset: 20px; background: linear-gradient(135deg, rgba(255,255,255,.12), transparent); border-radius: inherit; }
+@keyframes morph { 0%,100% { border-radius: 60% 40% 70% 30% / 40% 60% 30% 70%; } 25% { border-radius: 40% 60% 30% 70% / 60% 40% 70% 30%; } 50% { border-radius: 50% 50% 60% 40% / 50% 60% 40% 50%; } 75% { border-radius: 70% 30% 40% 60% / 30% 70% 60% 40%; } }
+.cell-dark-content { position: relative; z-index: 2; }
+.cell-dark-content h2 { font-size: clamp(22px, 3vw, 36px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; color: var(--white); margin-bottom: 16px; }
+.cell-dark-content p { font-size: 12px; color: rgba(255,255,255,.5); margin-bottom: 20px; }
+.btn-ghost { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--white); border: 1px solid rgba(255,255,255,.25); padding: 7px 14px; border-radius: 2px; text-decoration: none; transition: border-color .2s, background .2s; }
+.btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
+.cell-light { background: var(--off); display: flex; flex-direction: column; justify-content: flex-end; padding: 32px; }
+.cell-light-visual { position: absolute; inset: 0; overflow: hidden; }
+.geo-grid { position: absolute; inset: 0; background-image: linear-gradient(var(--border) 1px, transparent 1px), linear-gradient(90deg, var(--border) 1px, transparent 1px); background-size: 40px 40px; opacity: .6; }
+.geo-shape { position: absolute; left: 50%; top: 42%; transform: translate(-50%,-50%); width: 200px; height: 200px; border: 2px solid var(--dark); border-radius: 50%; animation: spin-slow 16s linear infinite; }
+.geo-shape::before { content: ''; position: absolute; inset: 20px; border: 1px solid rgba(0,0,0,.2); border-radius: 50%; }
+.geo-shape::after { content: ''; position: absolute; left: 50%; top: 50%; transform: translate(-50%,-50%); width: 60px; height: 60px; background: var(--dark); border-radius: 50%; }
+@keyframes spin-slow { from { transform: translate(-50%,-50%) rotate(0deg); } to { transform: translate(-50%,-50%) rotate(360deg); } }
+.diamond { position: absolute; left: 50%; top: 42%; transform: translate(-50%,-50%) rotate(45deg); width: 120px; height: 120px; border: 1.5px solid rgba(0,0,0,.15); animation: spin-slow 10s linear infinite reverse; }
+.cell-light-content { position: relative; z-index: 2; }
+.cell-light-content h2 { font-size: clamp(22px, 3vw, 36px); font-weight: 800; line-height: 1.08; letter-spacing: -.02em; color: var(--black); margin-bottom: 12px; }
+.cell-light-content .pill-row { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 16px; }
+.pill { font-size: 10px; font-weight: 600; letter-spacing: .08em; background: var(--white); border: 1px solid var(--border); padding: 4px 10px; border-radius: 100px; color: var(--dark); }
+.pill.filled { background: var(--dark); color: var(--white); border-color: var(--dark); }
 
-.header-logo {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-.header-logo .logo-mark {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  background: var(--olive);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--ivory);
-  font-family: var(--font-display);
-  font-size: 0.85rem;
-  font-weight: 500;
-  letter-spacing: 0.05em;
-}
-.header-logo .logo-text {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-}
+/* SERVICES */
+.services-section { border-bottom: 1px solid var(--border); }
+.services-header { padding: 52px 48px 36px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: space-between; }
+.services-header h2 { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -.03em; line-height: 1.0; }
+.services-header p { font-size: 13px; color: var(--mid); max-width: 240px; line-height: 1.65; }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); }
+.service-card { padding: 40px 36px 44px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; transition: background .25s; }
+.service-card:nth-child(3n) { border-right: none; }
+.service-card:nth-child(n+4) { border-bottom: none; }
+.service-card:hover { background: var(--off); }
+.service-card.dark { background: var(--dark); }
+.service-card.dark:hover { background: #222; }
+.sc-num { font-size: 10px; font-weight: 700; letter-spacing: .12em; color: var(--mid); }
+.service-card.dark .sc-num { color: rgba(255,255,255,.3); }
+.sc-title { font-size: 17px; font-weight: 800; letter-spacing: -.02em; line-height: 1.15; color: var(--dark); }
+.service-card.dark .sc-title { color: var(--white); }
+.sc-desc { font-size: 12.5px; line-height: 1.7; color: var(--mid); }
+.service-card.dark .sc-desc { color: rgba(255,255,255,.45); }
+.sc-tag { margin-top: auto; display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--blue); }
+.service-card.dark .sc-tag { color: rgba(255,255,255,.35); }
 
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 2.5rem;
-}
-.header-nav a,
-.header-nav a:link,
-.header-nav a:visited,
-.header-nav a:hover,
-.header-nav a:active {
-  font-family: var(--font-body) !important;
-  font-size: 0.8rem;
-  font-weight: 500;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1A1A1A !important;
-  transition: color 0.3s ease;
-  position: relative;
-}
-.header-nav a::after {
-  content: '';
-  position: absolute;
-  bottom: -3px;
-  left: 0;
-  width: 0;
-  height: 1px;
-  background: var(--text-primary);
-  transition: width 0.3s ease;
-}
-.header-nav a:hover { color: var(--text-primary); }
-.header-nav a:hover::after { width: 100%; }
+/* ABOUT */
+.about-section { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); min-height: 480px; }
+.about-left { padding: 64px 48px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+.section-label { font-size: 10px; font-weight: 600; letter-spacing: .18em; text-transform: uppercase; color: var(--mid); margin-bottom: 24px; display: flex; align-items: center; gap: 10px; }
+.section-label::before { content: ''; display: block; width: 20px; height: 1px; background: var(--mid); }
+.about-left h2 { font-size: var(--fs-h2); font-weight: 800; line-height: 1.0; letter-spacing: -.03em; color: var(--black); }
+.about-left h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--mid); }
+.about-left p { font-size: 13.5px; line-height: 1.75; color: var(--mid); max-width: 320px; margin-top: 24px; }
+.stat-row { display: flex; gap: 28px; margin-top: 40px; flex-wrap: wrap; }
+.stat-item .num { font-size: 36px; font-weight: 800; letter-spacing: -.03em; line-height: 1; color: var(--black); }
+.stat-item .lbl { font-size: 10px; font-weight: 500; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); margin-top: 4px; }
+.about-right { display: grid; grid-template-rows: 1fr 1fr; }
+.about-card { padding: 40px; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+.about-card:last-child { border-bottom: none; }
+.card-title { font-size: clamp(18px, 2.5vw, 28px); font-weight: 800; letter-spacing: -.02em; line-height: 1.1; }
+.card-body { font-size: 12.5px; line-height: 1.7; color: var(--mid); margin-top: 12px; }
+.card-list { list-style: none; margin-top: 16px; display: flex; flex-direction: column; gap: 7px; }
+.card-list li { font-size: 12.5px; color: var(--mid); display: flex; align-items: center; gap: 8px; }
+.card-list li::before { content: '→'; font-size: 10px; color: var(--blue); flex-shrink: 0; }
+.founder-card { background: var(--dark); }
+.founder-card .card-title { color: var(--white); font-size: 22px; }
+.founder-card .card-body { color: rgba(255,255,255,.55); }
+.founder-card .section-label { color: rgba(255,255,255,.4); }
+.founder-card .section-label::before { background: rgba(255,255,255,.3); }
+.founder-row { display: flex; gap: 20px; align-items: flex-start; }
+.founder-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, #2a35ff, #6a3de8); flex-shrink: 0; border: 2px solid rgba(255,255,255,.1); background-size: cover; background-position: center; }
+.btn-ghost-dark { display: inline-flex; align-items: center; gap: 6px; font-size: 10px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: var(--white); border: 1px solid rgba(255,255,255,.25); padding: 7px 14px; border-radius: 2px; text-decoration: none; transition: border-color .2s, background .2s; margin-top: 24px; align-self: flex-start; }
+.btn-ghost-dark:hover { border-color: var(--white); background: rgba(255,255,255,.08); }
 
-/* ================================================================
-   FIX #4 — VK & TELEGRAM ICONS
-   ================================================================ */
-.header-socials {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-}
-.header-socials a,
-.header-socials a:link,
-.header-socials a:visited,
-.header-socials a:hover,
-.header-socials a:active {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(26, 26, 26, 0.3) !important;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: #1A1A1A !important;
-  transition: all 0.3s ease;
-}
-.header-socials a:hover {
-  border-color: #1A1A1A !important;
-  color: #1A1A1A !important;
-  background: rgba(26, 26, 26, 0.06);
-}
-.header-socials a svg {
-  width: 16px;
-  height: 16px;
-}
+/* HOW IT WORKS */
+.feature-band { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); min-height: 560px; }
+.band-visual { position: relative; overflow: hidden; background: var(--black); border-right: 1px solid var(--border); }
+.band-visual-inner { position: absolute; inset: 0; background: linear-gradient(160deg, #0d1240 0%, #000 60%); overflow: hidden; }
+.band-lines { position: absolute; inset: 0; background-image: repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(42,53,255,.2) 39px, rgba(42,53,255,.2) 40px); }
+.band-lines-h { position: absolute; inset: 0; background-image: repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px); }
+.band-orb { position: absolute; bottom: -80px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; background: radial-gradient(ellipse, rgba(42,53,255,.55) 0%, transparent 70%); filter: blur(40px); }
+.band-labels { position: absolute; top: 0; left: 0; right: 0; padding: 28px; display: flex; flex-direction: column; gap: 10px; z-index: 2; }
+.band-step { display: flex; align-items: center; gap: 12px; font-size: 10px; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(255,255,255,.4); }
+.band-step .n { font-size: 9px; color: rgba(255,255,255,.2); width: 16px; }
+.band-step.active { color: rgba(255,255,255,.9); }
+.band-step.active .n { color: var(--blue); }
+.band-step-line { flex: 1; height: 1px; background: rgba(255,255,255,.08); }
+.band-step.active .band-step-line { background: rgba(42,53,255,.5); }
+.band-bottom { position: absolute; bottom: 0; left: 0; right: 0; padding: 32px; z-index: 2; }
+.band-bottom h3 { font-size: clamp(24px, 3vw, 38px); font-weight: 800; line-height: 1.05; letter-spacing: -.02em; color: var(--white); }
+.band-bottom .sub { font-size: 11px; color: rgba(255,255,255,.4); margin-top: 10px; text-transform: uppercase; letter-spacing: .1em; }
+.band-content { padding: 52px 48px; display: flex; flex-direction: column; justify-content: space-between; }
+.band-content .section-label { margin-bottom: 0; }
+.band-content h2 { font-size: var(--fs-h2); font-weight: 800; line-height: 1.0; letter-spacing: -.03em; margin: 28px 0 20px; }
+.band-content p { font-size: 13px; line-height: 1.75; color: var(--mid); max-width: 340px; }
+.process-steps { margin-top: 40px; display: flex; flex-direction: column; }
+.process-step { display: grid; grid-template-columns: 32px 1fr; gap: 16px; padding: 18px 0; border-top: 1px solid var(--border); align-items: start; }
+.process-step:last-child { border-bottom: 1px solid var(--border); }
+.ps-num { font-size: 10px; font-weight: 600; letter-spacing: .08em; color: var(--mid); padding-top: 2px; }
+.ps-title { font-size: 14px; font-weight: 700; letter-spacing: -.01em; }
+.ps-desc { font-size: 11.5px; color: var(--mid); margin-top: 4px; line-height: 1.6; }
 
-/* ================================================================
-   FIX #3a — HERO HEIGHT = 100vh
-   ================================================================ */
-.hero {
-  height: 100vh;
-  max-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 0;
-  position: relative;
-  overflow: hidden;
-}
+/* RESULTS */
+.results-section { border-bottom: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr 1fr; }
+.results-header { grid-column: 1 / -1; padding: 52px 48px 40px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-end; justify-content: space-between; }
+.results-header h2 { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -.03em; line-height: 1.0; }
+.results-header p { font-size: 13px; color: var(--mid); max-width: 260px; line-height: 1.65; }
+.result-card { padding: 36px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 14px; transition: background .25s; }
+.result-card:last-child { border-right: none; }
+.result-card:hover { background: var(--off); }
+.rc-graphic { width: 72px; height: 72px; flex-shrink: 0; }
+.rc-graphic svg { width: 72px; height: 72px; overflow: visible; display: block; }
+.rc-title { font-size: 15px; font-weight: 700; letter-spacing: -.01em; }
+.rc-body { font-size: 12px; line-height: 1.7; color: var(--mid); }
 
-.hero-content {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 5rem 3rem 3rem calc(max(var(--side-pad), (100vw - var(--container)) / 2 + var(--side-pad)));
-}
+/* CASES */
+.cases-section { border-bottom: 1px solid var(--border); }
+.cases-header { padding: 52px 48px 0; display: flex; align-items: flex-end; justify-content: space-between; }
+.cases-header h2 { font-size: var(--fs-h2); font-weight: 800; letter-spacing: -.03em; line-height: 1.0; }
+.cases-header p { font-size: 13px; color: var(--mid); max-width: 220px; line-height: 1.6; text-align: right; }
+.case-card { margin: 40px 48px 0; border: 1px solid var(--border); overflow: hidden; }
+.case-topbar { display: flex; align-items: center; justify-content: space-between; padding: 14px 28px; border-bottom: 1px solid var(--border); background: var(--off); }
+.case-topbar-left { display: flex; align-items: center; gap: 12px; }
+.case-index { font-size: 10px; font-weight: 700; letter-spacing: .14em; color: var(--mid); text-transform: uppercase; }
+.case-type-pill { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; background: var(--dark); color: var(--white); padding: 3px 10px; border-radius: 100px; }
+.case-live-link { font-size: 10px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--mid); text-decoration: none; display: flex; align-items: center; gap: 5px; transition: color .2s; }
+.case-live-link:hover { color: var(--blue); }
+.case-live-dot { width: 6px; height: 6px; background: #22c55e; border-radius: 50%; display: inline-block; animation: pulse-dot 2s ease-in-out infinite; }
+@keyframes pulse-dot { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:.5; transform:scale(1.4); } }
+.case-body { display: grid; grid-template-columns: 1fr 1fr; }
+.case-body-left { padding: 48px 40px; border-right: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+.case-kicker { font-size: 10px; font-weight: 700; letter-spacing: .18em; text-transform: uppercase; color: var(--blue); margin-bottom: 16px; display: flex; align-items: center; gap: 8px; }
+.case-kicker::before { content: ''; display: block; width: 16px; height: 1px; background: var(--blue); }
+.case-headline { font-size: clamp(26px, 3.5vw, 44px); font-weight: 800; line-height: 1.04; letter-spacing: -.03em; color: var(--black); }
+.case-headline em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: var(--mid); }
+.case-logic { margin-top: 28px; }
+.case-logic p { font-size: 13px; line-height: 1.8; color: var(--mid); max-width: 380px; }
+.case-logic p + p { margin-top: 12px; }
+.case-logic strong { color: var(--dark); font-weight: 600; }
+.case-cta-row { display: flex; align-items: center; gap: 16px; margin-top: 36px; flex-wrap: wrap; }
+.btn-case { display: inline-flex; align-items: center; gap: 7px; font-size: 11px; font-weight: 700; letter-spacing: .1em; text-transform: uppercase; background: var(--dark); color: var(--white); padding: 10px 20px; border-radius: 100px; text-decoration: none; transition: background .2s, gap .2s; }
+.btn-case:hover { background: var(--blue); gap: 10px; }
+.case-ru-note { font-size: 10px; color: var(--mid); line-height: 1.5; max-width: 200px; }
+.case-body-right { display: flex; flex-direction: column; }
+.case-metrics-grid { display: grid; grid-template-columns: 1fr 1fr; flex: 1; }
+.case-metric { padding: 32px; border-right: 1px solid var(--border); border-bottom: 1px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; transition: background .2s; }
+.case-metric:nth-child(2n) { border-right: none; }
+.case-metric:nth-child(3), .case-metric:nth-child(4) { border-bottom: none; }
+.case-metric:hover { background: var(--off); }
+.case-metric.hero-metric { background: var(--dark); }
+.case-metric.hero-metric:hover { background: #1f1f1c; }
+.metric-label { font-size: 9px; font-weight: 700; letter-spacing: .16em; text-transform: uppercase; color: var(--mid); }
+.case-metric.hero-metric .metric-label { color: rgba(255,255,255,.4); }
+.metric-value { font-size: clamp(28px, 3.5vw, 42px); font-weight: 800; letter-spacing: -.04em; line-height: 1; color: var(--black); margin-top: 12px; }
+.case-metric.hero-metric .metric-value { color: var(--white); }
+.metric-sub { font-size: 10px; color: var(--mid); margin-top: 6px; line-height: 1.5; }
+.case-metric.hero-metric .metric-sub { color: rgba(255,255,255,.35); }
+.metric-bar { height: 2px; background: var(--border); border-radius: 1px; margin-top: 14px; overflow: hidden; }
+.metric-bar-fill { height: 100%; background: var(--blue); border-radius: 1px; }
+.case-metric.hero-metric .metric-bar { background: rgba(255,255,255,.1); }
+.case-metric.hero-metric .metric-bar-fill { background: var(--blue); }
+.case-insight-strip { display: grid; grid-template-columns: repeat(3, 1fr); border-top: 1px solid var(--border); }
+.insight-item { padding: 22px 28px; border-right: 1px solid var(--border); display: flex; align-items: flex-start; gap: 12px; }
+.insight-item:last-child { border-right: none; }
+.insight-icon { width: 28px; height: 28px; flex-shrink: 0; }
+.insight-icon svg { width: 28px; height: 28px; display: block; }
+.insight-title { font-size: 11px; font-weight: 700; letter-spacing: -.01em; }
+.insight-desc { font-size: 10.5px; color: var(--mid); margin-top: 3px; line-height: 1.55; }
+.case-bottom-strip { padding: 16px 28px; border-top: 1px solid var(--border); background: var(--off); display: flex; align-items: center; justify-content: space-between; }
+.case-tags { display: flex; flex-wrap: wrap; gap: 6px; }
+.case-tag { font-size: 10px; font-weight: 600; letter-spacing: .06em; border: 1px solid var(--border); background: var(--white); padding: 3px 9px; border-radius: 100px; color: var(--dark); }
+.case-market-note { font-size: 10px; color: var(--mid); font-style: italic; }
+.cases-spacer { height: 48px; }
 
-.hero-label {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: var(--space-md);
-  opacity: 0;
-  animation: fadeUp 0.8s ease 0.8s forwards;
-}
+/* CTA */
+.cta-section { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 1px solid var(--border); min-height: 440px; }
+.cta-left { background: var(--dark); padding: 64px 56px; display: flex; flex-direction: column; justify-content: center; border-right: 1px solid rgba(255,255,255,.08); position: relative; overflow: hidden; }
+.cta-left::before { content: ''; position: absolute; bottom: -100px; right: -100px; width: 400px; height: 400px; background: radial-gradient(ellipse, rgba(42,53,255,.3) 0%, transparent 70%); pointer-events: none; }
+.cta-left-body { position: relative; z-index: 1; display: flex; flex-direction: column; gap: 28px; }
+.cta-left h2 { font-size: clamp(28px, 3.5vw, 48px); font-weight: 800; line-height: 1.05; letter-spacing: -.03em; color: var(--white); }
+.cta-left h2 em { font-family: 'Instrument Serif', serif; font-style: italic; font-weight: 400; color: rgba(255,255,255,.5); }
+.cta-actions { display: flex; gap: 14px; flex-wrap: wrap; }
+.btn-white { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; background: var(--white); color: var(--dark); padding: 15px 30px; border-radius: 100px; text-decoration: none; transition: background .2s, color .2s, gap .2s; box-shadow: 0 4px 24px rgba(0,0,0,.3); }
+.btn-white:hover { background: var(--blue); color: var(--white); gap: 12px; }
+.cta-microcopy { display: flex; flex-wrap: wrap; gap: 10px; align-items: center; font-size: 10.5px; font-weight: 500; letter-spacing: .08em; text-transform: uppercase; color: rgba(255,255,255,.5); }
+.cta-microcopy .dot-sep { color: rgba(255,255,255,.2); }
+.cta-right { padding: 64px 56px; display: flex; flex-direction: column; justify-content: space-between; }
+.cta-right .section-label { margin-bottom: 0; }
+.client-pills { display: flex; flex-wrap: wrap; gap: 8px; margin: 28px 0; }
+.client-pill { font-size: 11px; font-weight: 600; letter-spacing: .06em; background: var(--off); border: 1px solid var(--border); padding: 6px 14px; border-radius: 100px; }
+.cta-right p { font-size: 12.5px; line-height: 1.75; color: var(--mid); max-width: 320px; }
 
-.hero-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.8rem, 4.5vw, 4.5rem);
-  font-weight: 300;
-  line-height: 1.0;
-  letter-spacing: -0.02em;
-  margin-bottom: var(--space-md);
-  opacity: 0;
-  animation: fadeUp 0.8s ease 1s forwards;
-}
-.hero-title em {
-  font-style: italic;
-  font-weight: 300;
-  color: var(--olive);
-}
+/* FOOTER */
+footer { display: grid; grid-template-columns: 1.5fr 1fr 1fr; border-bottom: 1px solid var(--border); }
+.foot-col { padding: 48px 36px; border-right: 1px solid var(--border); }
+.foot-col:last-child { border-right: none; }
+.foot-logo { font-size: 14px; font-weight: 800; letter-spacing: .14em; text-transform: uppercase; margin-bottom: 12px; }
+.foot-tagline { font-size: 11.5px; color: var(--mid); line-height: 1.65; }
+.foot-title { font-size: 10px; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; color: var(--mid); margin-bottom: 20px; }
+.foot-links { display: flex; flex-direction: column; gap: 10px; }
+.foot-links a { font-size: 13px; color: var(--dark); text-decoration: none; font-weight: 500; transition: color .2s; }
+.foot-links a:hover { color: var(--blue); }
+.foot-bottom { grid-column: 1 / -1; border-top: 1px solid var(--border); padding: 18px 36px; display: flex; justify-content: space-between; align-items: center; }
+.foot-bottom span { font-size: 10.5px; color: var(--mid); letter-spacing: .06em; }
 
-.hero-desc {
-  font-family: var(--font-body);
-  font-size: 0.9rem;
-  line-height: 1.75;
-  color: var(--text-secondary);
-  max-width: 400px;
-  margin-bottom: var(--space-lg);
-  opacity: 0;
-  animation: fadeUp 0.8s ease 1.2s forwards;
-}
+/* REVEAL */
+.reveal { opacity: 0; transform: translateY(24px); transition: opacity .65s ease, transform .65s ease; }
+.reveal.visible { opacity: 1; transform: translateY(0); }
 
-.hero-actions {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  opacity: 0;
-  animation: fadeUp 0.8s ease 1.4s forwards;
+/* RESPONSIVE */
+@media (max-width: 900px) {
+  .services-grid { grid-template-columns: 1fr 1fr; }
+  .service-card:nth-child(3n) { border-right: 1px solid var(--border); }
+  .service-card:nth-child(2n) { border-right: none; }
+  footer { grid-template-columns: 1fr 1fr; }
 }
-
-.btn-primary,
-.btn-primary:link,
-.btn-primary:visited,
-.btn-primary:hover,
-.btn-primary:active {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  font-family: var(--font-body) !important;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 1rem 2.25rem;
-  background: var(--charcoal);
-  color: #FFFFFF !important;
-  border: none;
-  border-radius: 100px;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.btn-primary:hover {
-  background: var(--olive);
-  transform: translateY(-1px);
-}
-.btn-primary .arrow { transition: transform 0.3s ease; color: #FFFFFF !important; }
-.btn-primary:hover .arrow { transform: translateX(3px); }
-
-.btn-ghost,
-.btn-ghost:link,
-.btn-ghost:visited,
-.btn-ghost:active {
-  font-family: var(--font-body) !important;
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1A1A1A !important;
-  border-bottom: 1.5px solid #1A1A1A !important;
-  padding-bottom: 3px;
-  transition: all 0.3s ease;
-  cursor: pointer;
-}
-.btn-ghost:hover {
-  color: #4A4A42 !important;
-  border-color: #4A4A42 !important;
-}
-
-.hero-visual {
-  position: relative;
-  overflow: hidden;
-}
-.hero-visual .hero-img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  opacity: 0;
-  animation: heroImgReveal 1.2s ease 0.5s forwards;
-}
-
-/* ================================================================
-   FIX #3b — PRODUCT CARD
-   ================================================================ */
-.hero-product-card {
-  position: absolute;
-  bottom: 2.5rem;
-  left: 2.5rem;
-  background: var(--warm-white);
-  padding: 1.25rem 1.5rem;
-  display: flex;
-  align-items: center;
-  gap: 1.25rem;
-  border-radius: 4px;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.08);
-  opacity: 0;
-  animation: fadeUp 0.8s ease 1.6s forwards;
-  min-width: 260px;
-}
-.hero-product-card .card-img {
-  width: 72px;
-  height: 72px;
-  border-radius: 3px;
-  object-fit: cover;
-  background: var(--cream);
-}
-.hero-product-card .card-info { flex: 1; }
-.hero-product-card .card-name {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 500;
-  margin-bottom: 0.1rem;
-}
-.hero-product-card .card-price {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #333333;
-  margin-bottom: 0.4rem;
-}
-.hero-product-card .card-link,
-.hero-product-card .card-link:link,
-.hero-product-card .card-link:visited {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: #1A1A1A !important;
-  transition: color 0.3s ease;
-}
-.hero-product-card .card-link:hover { color: #555555 !important; }
-
-@keyframes fadeUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-@keyframes heroImgReveal {
-  from { opacity: 0; transform: scale(1.05); }
-  to { opacity: 1; transform: scale(1); }
-}
-
-/* ========== MARQUEE DIVIDER ========== */
-.marquee-section {
-  padding: var(--space-lg) 0;
-  border-top: 1px solid var(--border-light);
-  border-bottom: 1px solid var(--border-light);
-  overflow: hidden;
-}
-.marquee-track {
-  display: flex;
-  animation: marqueeScroll 30s linear infinite;
-  width: max-content;
-}
-.marquee-item {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
-  padding: 0 2rem;
-  white-space: nowrap;
-}
-.marquee-item span {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 400;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-}
-.marquee-item .dot {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background: var(--text-muted);
-  flex-shrink: 0;
-}
-@keyframes marqueeScroll {
-  0% { transform: translateX(0); }
-  100% { transform: translateX(-50%); }
-}
-
-/* ========== CATALOG TEASER ========== */
-.catalog-teaser { padding: var(--space-3xl) 0; }
-.catalog-header {
-  display: flex;
-  align-items: flex-end;
-  justify-content: space-between;
-  margin-bottom: var(--space-xl);
-}
-.catalog-header-left .section-label {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: var(--space-sm);
-}
-.catalog-header-left .section-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 400;
-  letter-spacing: -0.01em;
-}
-.catalog-header-right .section-desc {
-  font-size: 0.875rem;
-  color: var(--text-secondary);
-  max-width: 320px;
-  text-align: right;
-  line-height: 1.7;
-}
-
-.catalog-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-  margin-bottom: var(--space-xl);
-}
-
-.product-card {
-  position: relative;
-  overflow: hidden;
-  border-radius: 4px;
-  background: var(--cream);
-  cursor: pointer;
-}
-.product-card .card-image-wrap {
-  position: relative;
-  aspect-ratio: 3/4;
-  overflow: hidden;
-}
-.product-card .card-image-wrap img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.6s ease;
-}
-.product-card:hover .card-image-wrap img { transform: scale(1.04); }
-.product-card .card-overlay {
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to top, rgba(26,26,24,0.3) 0%, transparent 50%);
-  opacity: 0;
-  transition: opacity 0.4s ease;
-}
-.product-card:hover .card-overlay { opacity: 1; }
-.product-card .card-body {
-  padding: 1.25rem 1.25rem 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-.product-card .card-body .product-name {
-  font-family: var(--font-display);
-  font-size: 1.05rem;
-  font-weight: 500;
-}
-.product-card .card-body .product-price {
-  font-family: var(--font-body);
-  font-size: 0.85rem;
-  font-weight: 600;
-  color: #333333;
-}
-
-.catalog-cta { text-align: center; }
-.catalog-cta .btn-outline {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-family: var(--font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  padding: 1rem 2.5rem;
-  border: 1px solid var(--charcoal);
-  border-radius: 100px;
-  background: none;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-.catalog-cta .btn-outline:hover {
-  background: var(--charcoal);
-  color: var(--ivory);
-}
-
-/* ========== ABOUT SECTION ========== */
-.about-section {
-  padding: var(--space-3xl) 0;
-  background: var(--warm-white);
-}
-.about-inner {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 var(--side-pad);
-}
-.about-top {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
-  align-items: start;
-  margin-bottom: var(--space-3xl);
-}
-.about-left .section-label {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: var(--space-md);
-}
-.about-left .about-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4vw, 3.8rem);
-  font-weight: 400;
-  line-height: 1.1;
-  margin-bottom: var(--space-md);
-}
-.about-left .about-subtitle {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-style: italic;
-  font-weight: 400;
-  color: var(--text-secondary);
-  line-height: 1.6;
-}
-.about-right { padding-top: 1rem; }
-.about-right .about-text {
-  font-size: 0.9rem;
-  line-height: 1.85;
-  color: var(--text-secondary);
-  margin-bottom: var(--space-lg);
-}
-.about-right .about-highlight {
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 400;
-  line-height: 1.5;
-  color: var(--text-primary);
-  padding-left: 1.5rem;
-  border-left: 2px solid var(--olive);
-}
-
-.about-images {
-  display: grid;
-  grid-template-columns: 1.2fr 0.8fr;
-  gap: 1.5rem;
-  max-height: 480px;
-}
-.about-images .about-img {
-  border-radius: 4px;
-  overflow: hidden;
-}
-.about-images .about-img img {
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  transition: transform 0.8s ease;
-}
-.about-images .about-img:hover img { transform: scale(1.03); }
-
-/* ========== HOW WE WORK ========== */
-.process-section { padding: var(--space-3xl) 0; }
-.process-header {
-  text-align: center;
-  margin-bottom: var(--space-2xl);
-}
-.process-header .section-label {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: var(--text-muted);
-  margin-bottom: var(--space-sm);
-}
-.process-header .section-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 400;
-}
-.process-header .section-subtitle {
-  font-size: 0.9rem;
-  color: var(--text-secondary);
-  margin-top: var(--space-sm);
-  max-width: 480px;
-  margin-left: auto;
-  margin-right: auto;
-  line-height: 1.7;
-}
-
-.process-grid {
-  display: grid;
-  grid-template-columns: repeat(5, 1fr);
-  gap: 0;
-  position: relative;
-}
-.process-grid::before {
-  content: '';
-  position: absolute;
-  top: 2.75rem;
-  left: 10%;
-  right: 10%;
-  height: 1px;
-  background: var(--border-medium);
-}
-
-.process-step {
-  text-align: center;
-  padding: 0 1.25rem;
-  position: relative;
-}
-.step-number {
-  width: 56px;
-  height: 56px;
-  border-radius: 50%;
-  background: var(--ivory);
-  border: 1px solid var(--border-medium);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin: 0 auto var(--space-lg);
-  font-family: var(--font-display);
-  font-size: 1.3rem;
-  font-weight: 500;
-  color: var(--olive);
-  position: relative;
-  z-index: 2;
-  transition: all 0.3s ease;
-}
-.process-step:hover .step-number {
-  background: var(--olive);
-  border-color: var(--olive);
-  color: var(--ivory);
-}
-.step-title {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 0.5rem;
-}
-.step-desc {
-  font-size: 0.8rem;
-  line-height: 1.65;
-  color: var(--text-secondary);
-}
-
-/* ========== CONTACTS ========== */
-.contact-section {
-  padding: var(--space-3xl) 0;
-  background: var(--charcoal);
-  color: var(--ivory);
-  position: relative;
-  overflow: hidden;
-}
-.contact-section::before {
-  content: '';
-  position: absolute;
-  top: -50%;
-  right: -10%;
-  width: 600px;
-  height: 600px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(92, 90, 60, 0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-.contact-inner {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 var(--side-pad);
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: var(--space-3xl);
-  align-items: center;
-}
-.contact-left .section-label {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  color: rgba(250, 247, 242, 0.4);
-  margin-bottom: var(--space-md);
-}
-.contact-left .contact-title {
-  font-family: var(--font-display);
-  font-size: clamp(2.5rem, 4vw, 3.5rem);
-  font-weight: 400;
-  line-height: 1.1;
-  margin-bottom: var(--space-lg);
-}
-.contact-left .contact-desc {
-  font-size: 0.9rem;
-  line-height: 1.75;
-  color: rgba(250, 247, 242, 0.6);
-  max-width: 380px;
-}
-.contact-details {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-lg);
-}
-.contact-item {
-  display: flex;
-  align-items: flex-start;
-  gap: 1.25rem;
-}
-.contact-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 50%;
-  border: 1px solid rgba(250, 247, 242, 0.12);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
-}
-.contact-icon svg {
-  width: 18px;
-  height: 18px;
-  stroke: rgba(250, 247, 242, 0.6);
-}
-.contact-item .contact-label {
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: rgba(250, 247, 242, 0.35);
-  margin-bottom: 0.35rem;
-}
-.contact-item .contact-value {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 400;
-  color: rgba(250, 247, 242, 0.85);
-  line-height: 1.5;
-}
-.contact-item .contact-value a { transition: color 0.3s ease; }
-.contact-item .contact-value a:hover { color: var(--ivory); }
-
-/* ========== FOOTER ========== */
-.site-footer {
-  background: var(--charcoal);
-  border-top: 1px solid rgba(250, 247, 242, 0.06);
-  padding: var(--space-2xl) 0 var(--space-lg);
-  color: var(--ivory);
-}
-.footer-inner {
-  max-width: var(--container);
-  margin: 0 auto;
-  padding: 0 var(--side-pad);
-}
-.footer-top {
-  display: grid;
-  grid-template-columns: 1.5fr 1fr 1fr 1fr 1fr;
-  gap: 2rem;
-  padding-bottom: var(--space-2xl);
-  border-bottom: 1px solid rgba(250, 247, 242, 0.06);
-}
-.footer-brand .footer-logo {
-  font-family: var(--font-display);
-  font-size: 1.15rem;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  margin-bottom: 0.75rem;
-}
-.footer-brand .footer-tagline {
-  font-size: 0.8rem;
-  line-height: 1.65;
-  color: rgba(250, 247, 242, 0.4);
-  max-width: 240px;
-}
-.footer-col .footer-col-title {
-  font-family: var(--font-body);
-  font-size: 0.7rem;
-  font-weight: 600;
-  letter-spacing: 0.15em;
-  text-transform: uppercase;
-  color: rgba(250, 247, 242, 0.35);
-  margin-bottom: 1.25rem;
-}
-.footer-col ul {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.65rem;
-}
-.footer-col ul li a {
-  font-size: 0.85rem;
-  color: rgba(250, 247, 242, 0.55);
-  transition: color 0.3s ease;
-}
-.footer-col ul li a:hover { color: var(--ivory); }
-
-.footer-bottom {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-top: var(--space-lg);
-}
-.footer-copy {
-  font-size: 0.75rem;
-  color: rgba(250, 247, 242, 0.25);
-}
-.footer-socials {
-  display: flex;
-  gap: 1rem;
-}
-.footer-socials a {
-  width: 36px;
-  height: 36px;
-  border-radius: 50%;
-  border: 1px solid rgba(250, 247, 242, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: rgba(250, 247, 242, 0.4);
-  transition: all 0.3s ease;
-}
-.footer-socials a:hover {
-  border-color: rgba(250, 247, 242, 0.3);
-  color: var(--ivory);
-}
-
-/* ========== SCROLL REVEAL ========== */
-.reveal {
-  opacity: 0;
-  transform: translateY(30px);
-  transition: opacity 0.8s ease, transform 0.8s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-.reveal-delay-5 { transition-delay: 0.5s; }
-
-/* ========== RESPONSIVE ========== */
-@media (max-width: 1024px) {
-  .hero {
-    grid-template-columns: 1fr;
-    height: auto;
-    max-height: none;
-  }
-  .hero-content {
-    padding: 7rem var(--side-pad) 3rem;
-    max-width: 100%;
-    margin-left: 0;
-  }
-  .hero-visual { height: 55vh; }
-  .hero-product-card { left: 1.5rem; bottom: 1.5rem; }
-  .catalog-grid { grid-template-columns: repeat(2, 1fr); }
-  .about-top { grid-template-columns: 1fr; gap: var(--space-xl); }
-  .process-grid { grid-template-columns: repeat(3, 1fr); gap: var(--space-xl); }
-  .process-grid::before { display: none; }
-  .contact-inner { grid-template-columns: 1fr; gap: var(--space-xl); }
-  .footer-top { grid-template-columns: 1fr 1fr; gap: 2.5rem; }
-}
-
 @media (max-width: 768px) {
-  :root { --side-pad: 1.5rem; }
-  .header-nav { display: none; }
-  .hero-content { padding: 6rem var(--side-pad) 2rem; }
-  .hero-title { font-size: 2.8rem; }
-  .catalog-grid { grid-template-columns: 1fr; }
-  .about-images { grid-template-columns: 1fr; max-height: none; }
-  .process-grid { grid-template-columns: 1fr 1fr; }
-  .footer-top { grid-template-columns: 1fr; }
-  .footer-bottom { flex-direction: column; gap: 1rem; text-align: center; }
+  .hero, .split-grid, .about-section, .feature-band, .cta-section { grid-template-columns: 1fr; }
+  .results-section { grid-template-columns: 1fr; }
+  .results-header { flex-direction: column; gap: 16px; }
+  footer { grid-template-columns: 1fr; }
+  .split-cell { min-height: 400px; }
+  nav { padding: 0 20px; }
+  .nav-left .nav-label.num { display: none; }
+  .hero-left, .hero-right { padding: 36px 24px; }
+  .band-content { padding: 36px 28px; }
+  .cta-left, .cta-right { padding: 48px 32px; }
+  .services-grid { grid-template-columns: 1fr; }
+  .service-card { border-right: none !important; }
+  .service-card:nth-child(n) { border-bottom: 1px solid var(--border) !important; }
+  .service-card:last-child { border-bottom: none !important; }
+  .services-header { flex-direction: column; gap: 16px; }
+  .case-body { grid-template-columns: 1fr; }
+  .case-body-left { border-right: none; border-bottom: 1px solid var(--border); }
+  .case-insight-strip { grid-template-columns: 1fr; }
+  .insight-item { border-right: none; border-bottom: 1px solid var(--border); }
+  .insight-item:last-child { border-bottom: none; }
+  .cases-header { flex-direction: column; gap: 12px; padding: 40px 24px 0; }
+  .cases-header p { text-align: left; }
+  .case-card { margin: 28px 24px 0; }
+  .case-bottom-strip { flex-direction: column; align-items: flex-start; gap: 10px; }
+  .founder-row { flex-direction: column; }
 }
 </style>
 </head>
 <body>
 
-<!-- PRELOADER -->
-<div class="preloader" id="preloader">
-  <div class="preloader-logo">IVORY FLOWERS</div>
-</div>
+<div class="cursor" id="cursor"></div>
+<div class="cursor-ring" id="cursorRing"></div>
 
-<!-- HEADER -->
-<div class="header-wrap" id="headerWrap">
-  <header class="site-header">
-    <div class="header-logo">
-      <span class="logo-text">Ivory Flowers</span>
-    </div>
-    <nav class="header-nav">
-      <a href="#catalog">Цветы</a>
-      <a href="#catalog">Каталог</a>
-      <a href="#about">О нас</a>
-      <a href="#contact">Контакты</a>
-    </nav>
-    <div class="header-socials">
-      <a href="#" aria-label="VK">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M21.547 7H16.5a.5.5 0 00-.5.5v0a6.5 6.5 0 01-1.5 4.2c-.5.5-1 .8-1.5.8s-.7-.2-.7-.8V7.5a.5.5 0 00-.5-.5H8.5a.5.5 0 00-.4.8l.1.2c.5.7.8 1.5.8 2.5v2.3c0 .5-.1.8-.3 1s-.4.3-.7.3-.7-.2-1.2-.7A8.5 8.5 0 015 8.2a.5.5 0 00-.5-.3H2.5a.5.5 0 00-.5.6c1 5 4.5 9.5 10 9.5h1.5a.5.5 0 00.5-.5v-1.7a1 1 0 011-.9c.5 0 1 .3 1.7 1.1l2.1 2.5a.5.5 0 00.4.2h3.3a.5.5 0 00.4-.8l-2.5-3a.5.5 0 010-.6c1-1.2 2-2.8 2.5-4.5a.5.5 0 00-.5-.7z"/></svg>
-      </a>
-      <a href="#" aria-label="Telegram">
-        <svg viewBox="0 0 24 24" fill="currentColor"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg>
-      </a>
-    </div>
-  </header>
-</div>
+<!-- NAV -->
+<nav>
+  <div class="nav-left">
+    <a href="#intro" class="nav-label num" data-n="01">Introduction</a>
+    <a href="#services" class="nav-label num" data-n="02">Services</a>
+    <a href="#results" class="nav-label num" data-n="03">The Result</a>
+    <a href="#cases" class="nav-label num" data-n="04">Cases</a>
+  </div>
+  <div class="nav-logo"><span class="dot"></span> TVIM</div>
+  <div class="nav-right">
+    <a href="#about" class="nav-label">About</a>
+    <a href="https://t.me/danyamaltsev" class="btn-nav">Get Started ↗</a>
+  </div>
+</nav>
 
 <!-- HERO -->
-<section class="hero">
-  <div class="hero-content">
-    <p class="hero-label">Флористическая студия в Санкт-Петербурге</p>
-    <h1 class="hero-title">Букеты,<br>созданные<br>с <em>заботой</em></h1>
-    <p class="hero-desc">Свежие цветы, стильные композиции и быстрая доставка по городу. Соберём букет под ваш повод — от нежных композиций до премиальных подарочных сборок.</p>
-    <div class="hero-actions">
-      <a href="#catalog" class="btn-primary">В каталог <span class="arrow">→</span></a>
-      <a href="#about" class="btn-ghost">Подробнее</a>
-    </div>
+<section class="hero" id="intro">
+  <div class="hero-left reveal">
+    <h1>Turning<br>Vision Into<br>Mission.</h1>
   </div>
-  <div class="hero-visual">
-    <img class="hero-img" src="https://images.unsplash.com/photo-1487530811176-3780de880c2d?w=900&h=1200&fit=crop&crop=center" alt="Elegant bouquet of ivory roses" loading="eager">
-    <div class="hero-product-card">
-      <img class="card-img" src="https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=200&h=200&fit=crop" alt="Роза Айвори">
-      <div class="card-info">
-        <div class="card-name">Роза Айвори</div>
-        <div class="card-price">1 999 ₽</div>
-        <a href="#" class="card-link">Подробнее →</a>
+  <div class="hero-right reveal" style="transition-delay:.12s">
+    <p class="hero-desc">We build brands engineered for growth — not just aesthetics, but visuals built to drive clicks, trust, and sales. Not just how it looks — but how it's perceived, remembered, and chosen.</p>
+    <div>
+      <a href="https://t.me/danyamaltsev" class="btn-primary">Start your brand ↗</a>
+      <div class="hero-meta">
+        <span>40+ projects shipped</span>
+        <span class="dot-sep">·</span>
+        <span>7 years hands-on</span>
+        <span class="dot-sep">·</span>
+        <span>Engagements from $5K</span>
       </div>
     </div>
   </div>
 </section>
 
-<!-- MARQUEE -->
-<div class="marquee-section">
-  <div class="marquee-track">
-    <div class="marquee-item"><span>Розы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Тюльпаны</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Пионы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Гладиолусы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Ромашки</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Композиции</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Сухоцветы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Аксессуары</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Розы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Тюльпаны</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Пионы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Гладиолусы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Ромашки</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Композиции</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Сухоцветы</span><div class="dot"></div></div>
-    <div class="marquee-item"><span>Аксессуары</span><div class="dot"></div></div>
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-inner">
+    <span>Strategic Branding</span><span class="accent">◆</span>
+    <span>Visual Identity</span><span class="accent">◆</span>
+    <span>Conversion Architecture</span><span class="accent">◆</span>
+    <span>Brand Growth</span><span class="accent">◆</span>
+    <span>Website Development</span><span class="accent">◆</span>
+    <span>Telegram Bots & Mini Apps</span><span class="accent">◆</span>
+    <span>Attention to Action</span><span class="accent">◆</span>
+    <span>Design to Results</span><span class="accent">◆</span>
+    <span>Strategic Branding</span><span class="accent">◆</span>
+    <span>Visual Identity</span><span class="accent">◆</span>
+    <span>Conversion Architecture</span><span class="accent">◆</span>
+    <span>Brand Growth</span><span class="accent">◆</span>
+    <span>Website Development</span><span class="accent">◆</span>
+    <span>Telegram Bots & Mini Apps</span><span class="accent">◆</span>
+    <span>Attention to Action</span><span class="accent">◆</span>
+    <span>Design to Results</span><span class="accent">◆</span>
   </div>
 </div>
 
-<!-- CATALOG TEASER -->
-<section class="catalog-teaser" id="catalog">
-  <div class="container">
-    <div class="catalog-header reveal">
-      <div class="catalog-header-left">
-        <p class="section-label">Наши цветы</p>
-        <h2 class="section-title">Каталог</h2>
-      </div>
-      <div class="catalog-header-right">
-        <p class="section-desc">Букеты, созданные с заботой и вкусом — от классических роз до авторских композиций</p>
-      </div>
+<!-- SPLIT GRID -->
+<section class="split-grid">
+  <div class="split-cell cell-dark reveal">
+    <span class="cell-tag">Visual Identity</span>
+    <div class="cell-dark-visual"><div class="morph-shape"></div></div>
+    <div class="cell-dark-content">
+      <h2>Brands built to<br>capture attention<br>in seconds.</h2>
+      <p>A strong visual identity isn't decoration — it's a business tool.</p>
+      <a href="https://t.me/danyamaltsev" class="btn-ghost">See how it works →</a>
     </div>
-    <div class="catalog-grid">
-      <div class="product-card reveal reveal-delay-1">
-        <div class="card-image-wrap">
-          <img src="https://images.unsplash.com/photo-1455659817273-f96807779a8a?w=600&h=800&fit=crop" alt="Роза Айвори" loading="lazy">
-          <div class="card-overlay"></div>
-        </div>
-        <div class="card-body">
-          <span class="product-name">Роза Айвори</span>
-          <span class="product-price">1 999 ₽</span>
-        </div>
-      </div>
-      <div class="product-card reveal reveal-delay-2">
-        <div class="card-image-wrap">
-          <img src="https://images.unsplash.com/photo-1490750967868-88aa4f44baee?w=600&h=800&fit=crop" alt="Букет Нежность" loading="lazy">
-          <div class="card-overlay"></div>
-        </div>
-        <div class="card-body">
-          <span class="product-name">Букет Нежность</span>
-          <span class="product-price">3 499 ₽</span>
-        </div>
-      </div>
-      <div class="product-card reveal reveal-delay-3">
-        <div class="card-image-wrap">
-          <img src="https://images.unsplash.com/photo-1561181286-d3fee7d55364?w=600&h=800&fit=crop" alt="Тюльпаны Микс" loading="lazy">
-          <div class="card-overlay"></div>
-        </div>
-        <div class="card-body">
-          <span class="product-name">Тюльпаны Микс</span>
-          <span class="product-price">2 499 ₽</span>
-        </div>
-      </div>
+  </div>
+  <div class="split-cell cell-light reveal" style="transition-delay:.1s">
+    <span class="cell-tag">Conversion-Focused</span>
+    <div class="cell-light-visual">
+      <div class="geo-grid"></div>
+      <div class="geo-shape"></div>
+      <div class="diamond"></div>
     </div>
-    <div class="catalog-cta reveal">
-      <a href="#" class="btn-outline">Смотреть всё <span>→</span></a>
+    <div class="cell-light-content">
+      <div class="pill-row">
+        <span class="pill filled">Intentional</span>
+        <span class="pill">Recognizable</span>
+        <span class="pill">Results-driven</span>
+      </div>
+      <h2>Visual-first strategy<br>designed to convert.</h2>
     </div>
+  </div>
+</section>
+
+<!-- SERVICES -->
+<section class="services-section" id="services">
+  <div class="services-header reveal">
+    <h2>What We Do</h2>
+    <p>Every service is built around one goal — measurable growth.</p>
+  </div>
+  <div class="services-grid">
+
+    <div class="service-card reveal" style="transition-delay:.04s">
+      <div class="sc-num">01</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="24" cy="24" r="20" stroke="#1a1917" stroke-width="1.5"/>
+        <circle cx="24" cy="24" r="12" stroke="#1a1917" stroke-width="1"/>
+        <circle cx="24" cy="24" r="4" fill="#2a35ff"/>
+        <line x1="24" y1="4" x2="24" y2="14" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="24" y1="34" x2="24" y2="44" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="4" y1="24" x2="14" y2="24" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="34" y1="24" x2="44" y2="24" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="sc-title">Brand Strategy</div>
+      <p class="sc-desc">Position your brand with precision. We define your market advantage, voice, and visual language so every touchpoint is intentional and drives results.</p>
+      <span class="sc-tag">↗ Core Service</span>
+    </div>
+
+    <div class="service-card reveal" style="transition-delay:.08s">
+      <div class="sc-num">02</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="4" width="18" height="18" stroke="#1a1917" stroke-width="1.5"/>
+        <rect x="26" y="4" width="18" height="18" fill="#1a1917"/>
+        <rect x="4" y="26" width="18" height="18" stroke="#8a8884" stroke-width="1" stroke-dasharray="2 2"/>
+        <rect x="26" y="26" width="18" height="18" stroke="#2a35ff" stroke-width="1.5"/>
+        <rect x="8" y="8" width="10" height="10" fill="#2a35ff" opacity=".2"/>
+        <line x1="30" y1="30" x2="40" y2="40" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="40" y1="30" x2="30" y2="40" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+      <div class="sc-title">Visual Identity</div>
+      <p class="sc-desc">A complete visual system — logo, palette, typography, and motion — engineered to be recognizable, premium, and conversion-ready across every platform.</p>
+      <span class="sc-tag">↗ Core Service</span>
+    </div>
+
+    <div class="service-card reveal" style="transition-delay:.12s">
+      <div class="sc-num">03</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <polyline points="8,40 20,18 30,28 40,10" stroke="#1a1917" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <circle cx="40" cy="10" r="3" fill="#2a35ff"/>
+        <circle cx="20" cy="18" r="2" fill="#1a1917"/>
+        <circle cx="30" cy="28" r="2" fill="#8a8884"/>
+        <line x1="4" y1="44" x2="44" y2="44" stroke="#d8d7d4" stroke-width="1"/>
+      </svg>
+      <div class="sc-title">Conversion Design</div>
+      <p class="sc-desc">Design that moves people. Every layout, CTA, and visual hierarchy is structured to guide customers from attention to action to revenue.</p>
+      <span class="sc-tag">↗ Core Service</span>
+    </div>
+
+    <div class="service-card dark reveal" style="transition-delay:.04s">
+      <div class="sc-num">04</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="4" y="8" width="40" height="28" rx="2" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+        <rect x="8" y="12" width="32" height="20" rx="1" fill="rgba(42,53,255,.2)" stroke="rgba(42,53,255,.6)" stroke-width="1"/>
+        <line x1="18" y1="38" x2="30" y2="38" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="24" y1="36" x2="24" y2="42" stroke="rgba(255,255,255,.3)" stroke-width="2" stroke-linecap="round"/>
+        <line x1="12" y1="19" x2="22" y2="19" stroke="rgba(42,53,255,.9)" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="12" y1="24" x2="36" y2="24" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="12" y1="28" x2="28" y2="28" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-linecap="round"/>
+        <circle cx="34" cy="19" r="3" fill="#2a35ff"/>
+      </svg>
+      <div class="sc-title">Website Development</div>
+      <p class="sc-desc">High-performance websites built with custom design from the ground up. Fast, responsive, and conversion-optimised — not a template in sight.</p>
+      <span class="sc-tag">↗ Core Service</span>
+    </div>
+
+    <div class="service-card dark reveal" style="transition-delay:.08s">
+      <div class="sc-num">05</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="6" y="4" width="36" height="40" rx="6" stroke="rgba(255,255,255,.4)" stroke-width="1.5"/>
+        <rect x="10" y="8" width="28" height="22" rx="1" fill="rgba(42,53,255,.18)" stroke="rgba(42,53,255,.6)" stroke-width="1"/>
+        <circle cx="14" cy="13" r="1.5" fill="rgba(42,53,255,.9)"/>
+        <line x1="18" y1="13" x2="32" y2="13" stroke="rgba(255,255,255,.4)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="14" y1="19" x2="34" y2="19" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-linecap="round"/>
+        <line x1="14" y1="23" x2="28" y2="23" stroke="rgba(255,255,255,.2)" stroke-width="1" stroke-linecap="round"/>
+        <rect x="10" y="34" width="28" height="6" rx="3" fill="#2a35ff"/>
+      </svg>
+      <div class="sc-title">Telegram Bots &amp; Mini Apps</div>
+      <p class="sc-desc">Custom bots and Telegram Mini Apps with brand-native UX. Multilingual API, payments, automation — products that feel as good as they perform.</p>
+      <span class="sc-tag">↗ New</span>
+    </div>
+
+    <div class="service-card reveal" style="transition-delay:.12s">
+      <div class="sc-num">06</div>
+      <svg width="48" height="48" viewBox="0 0 48 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="4" y1="44" x2="44" y2="44" stroke="#d8d7d4" stroke-width="1"/>
+        <rect x="6" y="30" width="8" height="14" fill="#d8d7d4"/>
+        <rect x="20" y="22" width="8" height="22" fill="#8a8884"/>
+        <rect x="34" y="12" width="8" height="32" fill="#1a1917"/>
+        <line x1="38" y1="44" x2="38" y2="8" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round" stroke-dasharray="3 2"/>
+        <polyline points="33,13 38,6 43,13" fill="none" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+      <div class="sc-title">Launch &amp; Optimization</div>
+      <p class="sc-desc">Deploy with confidence and keep growing. We track, test, and refine every element post-launch to compound results over time and maximise ROI.</p>
+      <span class="sc-tag">↗ Core Service</span>
+    </div>
+
   </div>
 </section>
 
 <!-- ABOUT -->
 <section class="about-section" id="about">
-  <div class="about-inner">
-    <div class="about-top">
-      <div class="about-left reveal">
-        <p class="section-label">О нас</p>
-        <h2 class="about-title">Студия, создающая букеты, которые остаются в памяти</h2>
-        <p class="about-subtitle">Эстетика, свежесть и внимание к каждой детали</p>
+  <div class="about-left reveal">
+    <div>
+      <div class="section-label">About TVIM</div>
+      <h2>We help businesses grow through strategic <em>visual branding.</em></h2>
+      <p>From attention to action, from design to measurable results. Every decision is made with one goal: growth. Because your brand is the first impression, the lasting memory, and the reason customers choose you.</p>
+    </div>
+    <div class="stat-row">
+      <div class="stat-item">
+        <div class="num">40+</div>
+        <div class="lbl">Projects shipped</div>
       </div>
-      <div class="about-right reveal reveal-delay-2">
-        <p class="about-text">IVORY FLOWERS — это студия, в которой мы соединяем эстетику, свежесть и внимание к деталям. Мы создаём букеты, которые передают эмоции, настроение и атмосферу вашего повода.</p>
-        <p class="about-text">Наши флористы работают только с качественными цветами и продумывают каждую композицию так, чтобы она радовала как можно дольше.</p>
-        <p class="about-highlight">Каждый букет — это история, рассказанная языком цветов</p>
+      <div class="stat-item">
+        <div class="num">$120K+</div>
+        <div class="lbl">Generated for clients</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">10×</div>
+        <div class="lbl">Above industry conversion</div>
+      </div>
+      <div class="stat-item">
+        <div class="num">7yr</div>
+        <div class="lbl">Hands-on experience</div>
       </div>
     </div>
-    <div class="about-images reveal">
-      <div class="about-img">
-        <img src="https://optim.tildacdn.com/tild3730-3961-4665-a562-323065306462/-/format/webp/299087b4508f389e59a2.png.webp" alt="Флористическая студия" loading="lazy">
+  </div>
+  <div class="about-right">
+    <div class="about-card reveal" style="transition-delay:.1s">
+      <div>
+        <div class="section-label">What we deliver</div>
+        <div class="card-title">Strategic visual brands that communicate value clearly.</div>
       </div>
-      <div class="about-img">
-        <img src="https://optim.tildacdn.com/tild3135-6133-4763-b937-333764626562/-/format/webp/7ac20620468974673b12.png.webp" alt="Работа флориста" loading="lazy">
+      <ul class="card-list">
+        <li>Capture attention in seconds</li>
+        <li>Communicate value clearly</li>
+        <li>Guide customers to action</li>
+        <li>Increase clicks, conversions, revenue</li>
+      </ul>
+    </div>
+    <div class="about-card founder-card reveal" style="transition-delay:.2s">
+      <div class="founder-row">
+        <div class="founder-avatar" style="background-image:url('https://github.com/danya-maltsev/TVIM/blob/main/ми%201.png?raw=true')"></div>
+        <div>
+          <div class="section-label" style="margin-bottom:8px">Led by founder</div>
+          <div class="card-title">Даня Мальцев</div>
+          <p class="card-body" style="margin-top:8px">Independent designer with 7 years of hands-on experience across startups, e-commerce, and product design. 40+ products shipped across SF–Dubai–Russia projects. Hit a 39% conversion rate on a $120K+ revenue platform.</p>
+        </div>
+      </div>
+      <a href="https://t.me/danyamaltsev" class="btn-ghost-dark">Work with me →</a>
+    </div>
+  </div>
+</section>
+
+<!-- HOW IT WORKS -->
+<section class="feature-band" id="what-we-do">
+  <div class="band-visual reveal">
+    <div class="band-visual-inner">
+      <div class="band-lines"></div>
+      <div class="band-lines-h"></div>
+      <div class="band-orb"></div>
+    </div>
+    <div class="band-labels">
+      <div class="band-step active"><span class="n">01</span> Strategy &amp; Positioning <div class="band-step-line"></div></div>
+      <div class="band-step"><span class="n">02</span> Conversion Architecture <div class="band-step-line"></div></div>
+      <div class="band-step"><span class="n">03</span> Visual System <div class="band-step-line"></div></div>
+      <div class="band-step"><span class="n">04</span> Launch &amp; Optimization <div class="band-step-line"></div></div>
+    </div>
+    <div class="band-bottom">
+      <h3>Don't just look<br>good. Perform.</h3>
+      <p class="sub">From positioning to launch</p>
+    </div>
+  </div>
+  <div class="band-content reveal" style="transition-delay:.12s">
+    <div>
+      <div class="section-label">How It Works</div>
+      <h2>Four steps.<br>One goal:<br>Results.</h2>
+      <p>We combine strategy, design, and art direction to build brands that perform across every digital platform — from first impression to final conversion.</p>
+    </div>
+    <div class="process-steps">
+      <div class="process-step">
+        <div class="ps-num">01</div>
+        <div>
+          <div class="ps-title">Strategy &amp; Positioning</div>
+          <div class="ps-desc">Define your market position, target audience, and competitive advantage.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">02</div>
+        <div>
+          <div class="ps-title">Conversion Architecture</div>
+          <div class="ps-desc">Design every touchpoint to move customers from attention to action.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">03</div>
+        <div>
+          <div class="ps-title">Visual System</div>
+          <div class="ps-desc">Build a cohesive identity: logo, typography, color, layout, and motion.</div>
+        </div>
+      </div>
+      <div class="process-step">
+        <div class="ps-num">04</div>
+        <div>
+          <div class="ps-title">Launch &amp; Optimization</div>
+          <div class="ps-desc">Deploy, measure, and continuously refine for maximum impact.</div>
+        </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- HOW WE WORK -->
-<section class="process-section">
-  <div class="container">
-    <div class="process-header reveal">
-      <p class="section-label">Процесс</p>
-      <h2 class="section-title">Как мы работаем</h2>
-      <p class="section-subtitle">Мы сделали процесс покупки удобным и прозрачным</p>
+<!-- RESULTS -->
+<section class="results-section" id="results">
+  <div class="results-header reveal">
+    <h2>The Result</h2>
+    <p>A premium brand that attracts the right audience, builds trust instantly, and performs across every digital platform.</p>
+  </div>
+
+  <div class="result-card reveal" style="transition-delay:.05s">
+    <div class="rc-graphic">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <circle cx="36" cy="36" r="30" stroke="#d8d7d4" stroke-width="1"/>
+        <circle cx="36" cy="36" r="20" stroke="#d8d7d4" stroke-width="1"/>
+        <circle cx="36" cy="36" r="10" stroke="#1a1917" stroke-width="1.5"/>
+        <circle cx="36" cy="36" r="4" fill="#2a35ff"/>
+        <line x1="36" y1="2" x2="36" y2="12" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="36" y1="60" x2="36" y2="70" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="2" y1="36" x2="12" y2="36" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="60" y1="36" x2="70" y2="36" stroke="#2a35ff" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="9" y1="9" x2="16" y2="16" stroke="#d8d7d4" stroke-width="1" stroke-linecap="round"/>
+        <line x1="56" y1="56" x2="63" y2="63" stroke="#d8d7d4" stroke-width="1" stroke-linecap="round"/>
+        <line x1="63" y1="9" x2="56" y2="16" stroke="#d8d7d4" stroke-width="1" stroke-linecap="round"/>
+        <line x1="16" y1="56" x2="9" y2="63" stroke="#d8d7d4" stroke-width="1" stroke-linecap="round"/>
+      </svg>
     </div>
-    <div class="process-grid">
-      <div class="process-step reveal reveal-delay-1">
-        <div class="step-number">1</div>
-        <h3 class="step-title">Выбираете букет</h3>
-        <p class="step-desc">В каталоге или с помощью нашего флориста</p>
-      </div>
-      <div class="process-step reveal reveal-delay-2">
-        <div class="step-number">2</div>
-        <h3 class="step-title">Оформляете заказ</h3>
-        <p class="step-desc">Указываете адрес и удобное время доставки</p>
-      </div>
-      <div class="process-step reveal reveal-delay-3">
-        <div class="step-number">3</div>
-        <h3 class="step-title">Собираем букет</h3>
-        <p class="step-desc">Только из свежих цветов в выбранном стиле</p>
-      </div>
-      <div class="process-step reveal reveal-delay-4">
-        <div class="step-number">4</div>
-        <h3 class="step-title">Доставка</h3>
-        <p class="step-desc">В течение 1–2 часов, аккуратно и точно в срок</p>
-      </div>
-      <div class="process-step reveal reveal-delay-5">
-        <div class="step-number">5</div>
-        <h3 class="step-title">Радость</h3>
-        <p class="step-desc">Каждый букет упакован красиво и надёжно</p>
-      </div>
+    <div class="rc-title">Attract the right audience</div>
+    <p class="rc-body">Your brand speaks directly to your ideal customer — drawing them in with clarity and confidence.</p>
+  </div>
+
+  <div class="result-card reveal" style="transition-delay:.1s">
+    <div class="rc-graphic">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect x="8" y="8" width="24" height="24" stroke="#1a1917" stroke-width="1.5"/>
+        <rect x="40" y="8" width="24" height="24" stroke="#d8d7d4" stroke-width="1"/>
+        <rect x="8" y="40" width="24" height="24" stroke="#d8d7d4" stroke-width="1" stroke-dasharray="2 2"/>
+        <rect x="40" y="40" width="24" height="24" fill="#1a1917"/>
+        <rect x="13" y="13" width="14" height="14" fill="#2a35ff" opacity=".15"/>
+        <rect x="13" y="13" width="14" height="14" stroke="#2a35ff" stroke-width="1"/>
+        <polyline points="46,56 52,63 64,48" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
     </div>
+    <div class="rc-title">Build trust instantly</div>
+    <p class="rc-body">A premium visual identity signals credibility before a single word is read. First impressions close deals.</p>
+  </div>
+
+  <div class="result-card reveal" style="transition-delay:.15s">
+    <div class="rc-graphic">
+      <svg viewBox="0 0 72 72" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <line x1="6" y1="66" x2="66" y2="66" stroke="#d8d7d4" stroke-width="1.5"/>
+        <rect x="8" y="46" width="14" height="20" fill="#d8d7d4"/>
+        <rect x="29" y="34" width="14" height="32" fill="#8a8884"/>
+        <rect x="50" y="18" width="14" height="48" fill="#1a1917"/>
+        <line x1="57" y1="46" x2="57" y2="8" stroke="#2a35ff" stroke-width="2" stroke-linecap="round"/>
+        <polyline points="50,15 57,7 64,15" fill="none" stroke="#2a35ff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+      </svg>
+    </div>
+    <div class="rc-title">Attention into sales</div>
+    <p class="rc-body">Turn attention into action, and action into revenue. Every visual decision engineered for measurable results.</p>
   </div>
 </section>
 
-<!-- CONTACTS -->
-<section class="contact-section" id="contact">
-  <div class="contact-inner">
-    <div class="contact-left reveal">
-      <p class="section-label">Свяжитесь с нами</p>
-      <h2 class="contact-title">Если у вас остались вопросы</h2>
-      <p class="contact-desc">Мы всегда рады помочь с выбором букета или ответить на любые вопросы о доставке и оплате</p>
+<!-- CASES -->
+<section class="cases-section" id="cases">
+  <div class="cases-header reveal">
+    <h2>Featured work</h2>
+    <p>Live proof the strategy works — in numbers.</p>
+  </div>
+
+  <div class="case-card reveal" style="transition-delay:.08s">
+
+    <div class="case-topbar">
+      <div class="case-topbar-left">
+        <span class="case-index">Featured Case Study</span>
+        <span class="case-type-pill">E-Commerce · Wellness</span>
+      </div>
+      <a href="https://kodabsoluta.ru/" target="_blank" rel="noopener" class="case-live-link">
+        <span class="case-live-dot"></span> View live site ↗
+      </a>
     </div>
-    <div class="contact-details reveal reveal-delay-2">
-      <div class="contact-item">
-        <div class="contact-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M21.75 6.75v10.5a2.25 2.25 0 01-2.25 2.25h-15a2.25 2.25 0 01-2.25-2.25V6.75m19.5 0A2.25 2.25 0 0019.5 4.5h-15a2.25 2.25 0 00-2.25 2.25m19.5 0v.243a2.25 2.25 0 01-1.07 1.916l-7.5 4.615a2.25 2.25 0 01-2.36 0L3.32 8.91a2.25 2.25 0 01-1.07-1.916V6.75"/></svg>
-        </div>
+
+    <div class="case-body">
+      <div class="case-body-left">
         <div>
-          <div class="contact-label">Email</div>
-          <div class="contact-value"><a href="mailto:contact@company.com">contact@company.com</a></div>
+          <div class="case-kicker">Kod Absoluta — RU Market</div>
+          <h3 class="case-headline">Minimalism that<br>converts at <em>39%.</em></h3>
+          <div class="case-logic">
+            <p>With <strong>88% of traffic arriving on mobile</strong>, the design brief was simple: remove every possible point of friction. The result was a scroll-native, single-flow UI with zero distractions — thumb-reachable CTAs, content-first hierarchy, and a visual language soft enough to disarm, precise enough to sell.</p>
+            <p>A friction-free purchase path and emotionally resonant aesthetic aren't in tension — <strong>they're the same thing</strong>. When visitors feel safe and seen, they convert. This project proves it at scale.</p>
+          </div>
+        </div>
+        <div class="case-cta-row">
+          <a href="https://kodabsoluta.ru/" target="_blank" rel="noopener" class="btn-case">View live project ↗</a>
+          <p class="case-ru-note">Live RU-market project. Interface in Russian — UX patterns are universal.</p>
         </div>
       </div>
-      <div class="contact-item">
-        <div class="contact-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M2.25 6.75c0 8.284 6.716 15 15 15h2.25a2.25 2.25 0 002.25-2.25v-1.372c0-.516-.351-.966-.852-1.091l-4.423-1.106c-.44-.11-.902.055-1.173.417l-.97 1.293c-.282.376-.769.542-1.21.38a12.035 12.035 0 01-7.143-7.143c-.162-.441.004-.928.38-1.21l1.293-.97c.363-.271.527-.734.417-1.173L6.963 3.102a1.125 1.125 0 00-1.091-.852H4.5A2.25 2.25 0 002.25 4.5v2.25z"/></svg>
-        </div>
-        <div>
-          <div class="contact-label">Телефон</div>
-          <div class="contact-value"><a href="tel:+71234567899">+7 (123) 456 7899</a></div>
-        </div>
-      </div>
-      <div class="contact-item">
-        <div class="contact-icon">
-          <svg fill="none" viewBox="0 0 24 24" stroke-width="1.5"><path stroke-linecap="round" stroke-linejoin="round" d="M15 10.5a3 3 0 11-6 0 3 3 0 016 0z"/><path stroke-linecap="round" stroke-linejoin="round" d="M19.5 10.5c0 7.142-7.5 11.25-7.5 11.25S4.5 17.642 4.5 10.5a7.5 7.5 0 1115 0z"/></svg>
-        </div>
-        <div>
-          <div class="contact-label">Адрес</div>
-          <div class="contact-value">Санкт-Петербург,<br>ул. Неизвестная, 874632</div>
+
+      <div class="case-body-right">
+        <div class="case-metrics-grid">
+          <div class="case-metric hero-metric">
+            <div class="metric-label">Conversion Rate</div>
+            <div class="metric-value">39.16%</div>
+            <div class="metric-sub">Industry avg: 2–4%.<br>This is 10× the benchmark.</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:100%"></div></div>
+          </div>
+          <div class="case-metric">
+            <div class="metric-label">Mobile Traffic</div>
+            <div class="metric-value">88%</div>
+            <div class="metric-sub">Design was mobile-first from day one.</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:88%"></div></div>
+          </div>
+          <div class="case-metric">
+            <div class="metric-label">Total Revenue</div>
+            <div class="metric-value">$120K+</div>
+            <div class="metric-sub">11.2M+ ₽ generated through the platform.</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:72%"></div></div>
+          </div>
+          <div class="case-metric">
+            <div class="metric-label">Retention Rate</div>
+            <div class="metric-value">31.44%</div>
+            <div class="metric-sub">Returning buyers — proof of brand trust.</div>
+            <div class="metric-bar"><div class="metric-bar-fill" style="width:31%"></div></div>
+          </div>
         </div>
       </div>
     </div>
+
+    <div class="case-insight-strip">
+      <div class="insight-item">
+        <div class="insight-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <rect x="8" y="2" width="12" height="24" rx="3" stroke="#1a1917" stroke-width="1.5"/>
+            <rect x="10" y="5" width="8" height="13" rx="1" fill="#2a35ff" opacity=".15" stroke="#2a35ff" stroke-width=".75"/>
+            <circle cx="14" cy="22" r="1.5" fill="#1a1917"/>
+          </svg>
+        </div>
+        <div>
+          <div class="insight-title">Mobile-First Architecture</div>
+          <div class="insight-desc">Entire layout designed thumb-first. Navigation, CTAs, and content are all within reach — no pinching, no friction.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="14" cy="14" r="11" stroke="#1a1917" stroke-width="1.5"/>
+            <circle cx="14" cy="14" r="5" stroke="#2a35ff" stroke-width="1"/>
+            <circle cx="14" cy="14" r="2" fill="#2a35ff"/>
+            <line x1="14" y1="3" x2="14" y2="7" stroke="#1a1917" stroke-width="1.2" stroke-linecap="round"/>
+            <line x1="14" y1="21" x2="14" y2="25" stroke="#1a1917" stroke-width="1.2" stroke-linecap="round"/>
+          </svg>
+        </div>
+        <div>
+          <div class="insight-title">Zero-Distraction UI</div>
+          <div class="insight-desc">Soft gradients and minimal chrome keep emotional focus on the offer. Every visual element earns its place or gets removed.</div>
+        </div>
+      </div>
+      <div class="insight-item">
+        <div class="insight-icon">
+          <svg viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <polyline points="3,22 9,14 15,17 22,8" stroke="#1a1917" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            <circle cx="22" cy="8" r="2.5" fill="#2a35ff"/>
+            <line x1="3" y1="25" x2="25" y2="25" stroke="#d8d7d4" stroke-width="1"/>
+          </svg>
+        </div>
+        <div>
+          <div class="insight-title">Single-Flow Purchase Path</div>
+          <div class="insight-desc">Awareness → trust → registration → payment in one linear scroll. No dead ends, no back-navigation — just forward momentum.</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="case-bottom-strip">
+      <div class="case-tags">
+        <span class="case-tag">Brand Identity</span>
+        <span class="case-tag">UX Strategy</span>
+        <span class="case-tag">Mobile-First</span>
+        <span class="case-tag">Conversion Optimisation</span>
+        <span class="case-tag">Wellness / E-Commerce</span>
+      </div>
+      <span class="case-market-note">RU market · 2023–2024</span>
+    </div>
+
+  </div>
+  <div class="cases-spacer"></div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contact">
+  <div class="cta-left reveal">
+    <div class="cta-left-body">
+      <h2>Ready to turn your vision into a <em>mission</em>?</h2>
+      <div class="cta-actions">
+        <a href="https://t.me/danyamaltsev" class="btn-white">Start a project ↗</a>
+      </div>
+      <div class="cta-microcopy">
+        <span>Reply within 24h</span>
+        <span class="dot-sep">·</span>
+        <span>Engagements from $5K</span>
+        <span class="dot-sep">·</span>
+        <span>2-week kickoff</span>
+      </div>
+    </div>
+  </div>
+  <div class="cta-right reveal" style="transition-delay:.1s">
+    <div class="section-label">Built for brands that mean business</div>
+    <div>
+      <div class="client-pills">
+        <span class="client-pill">Startups</span>
+        <span class="client-pill">Scale-ups</span>
+        <span class="client-pill">DTC Brands</span>
+        <span class="client-pill">SaaS</span>
+        <span class="client-pill">E-commerce</span>
+        <span class="client-pill">Telegram Products</span>
+      </div>
+      <p>Whether you're building from zero or rebranding for growth — we bring the strategy, design, and direction to make your brand work harder than ever.</p>
+    </div>
+    <div class="section-label" style="margin-top:32px">hello@tvim.agency</div>
   </div>
 </section>
 
 <!-- FOOTER -->
-<footer class="site-footer">
-  <div class="footer-inner">
-    <div class="footer-top">
-      <div class="footer-brand">
-        <div class="footer-logo">Ivory Flowers</div>
-        <p class="footer-tagline">Букеты, созданные с заботой и вкусом. Доставка по Санкт-Петербургу.</p>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Цветы</h4>
-        <ul>
-          <li><a href="#">Розы</a></li>
-          <li><a href="#">Тюльпаны</a></li>
-          <li><a href="#">Гладиолусы</a></li>
-          <li><a href="#">Ромашки</a></li>
-          <li><a href="#">Пионы</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Категории</h4>
-        <ul>
-          <li><a href="#">Букеты</a></li>
-          <li><a href="#">Цветы поштучно</a></li>
-          <li><a href="#">Композиции</a></li>
-          <li><a href="#">Сухоцветы</a></li>
-          <li><a href="#">Аксессуары</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Навигация</h4>
-        <ul>
-          <li><a href="#catalog">Цветы</a></li>
-          <li><a href="#catalog">Каталог</a></li>
-          <li><a href="#about">О нас</a></li>
-          <li><a href="#contact">Контакты</a></li>
-        </ul>
-      </div>
-      <div class="footer-col">
-        <h4 class="footer-col-title">Подписывайтесь</h4>
-        <ul>
-          <li><a href="#">VK</a></li>
-          <li><a href="#">Telegram</a></li>
-        </ul>
-      </div>
+<footer>
+  <div class="foot-col">
+    <div class="foot-logo">◆ TVIM</div>
+    <p class="foot-tagline">Turning Vision Into Mission.<br>Strategic visual branding<br>for growth-focused businesses.</p>
+  </div>
+  <div class="foot-col">
+    <div class="foot-title">Explore</div>
+    <div class="foot-links">
+      <a href="#services">Services</a>
+      <a href="#what-we-do">Process</a>
+      <a href="#cases">Featured work</a>
+      <a href="#about">About</a>
     </div>
-    <div class="footer-bottom">
-      <p class="footer-copy">Copyright &copy; 2025 IVORY FLOWERS | Все права защищены</p>
-      <div class="footer-socials">
-        <a href="#" aria-label="VK">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M21.547 7H16.5a.5.5 0 00-.5.5v0a6.5 6.5 0 01-1.5 4.2c-.5.5-1 .8-1.5.8s-.7-.2-.7-.8V7.5a.5.5 0 00-.5-.5H8.5a.5.5 0 00-.4.8l.1.2c.5.7.8 1.5.8 2.5v2.3c0 .5-.1.8-.3 1s-.4.3-.7.3-.7-.2-1.2-.7A8.5 8.5 0 015 8.2a.5.5 0 00-.5-.3H2.5a.5.5 0 00-.5.6c1 5 4.5 9.5 10 9.5h1.5a.5.5 0 00.5-.5v-1.7a1 1 0 011-.9c.5 0 1 .3 1.7 1.1l2.1 2.5a.5.5 0 00.4.2h3.3a.5.5 0 00.4-.8l-2.5-3a.5.5 0 010-.6c1-1.2 2-2.8 2.5-4.5a.5.5 0 00-.5-.7z"/></svg>
-        </a>
-        <a href="#" aria-label="Telegram">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="currentColor"><path d="M20.665 3.717l-17.73 6.837c-1.21.486-1.203 1.161-.222 1.462l4.552 1.42 10.532-6.645c.498-.303.953-.14.579.192l-8.533 7.701h-.002l.002.001-.314 4.692c.46 0 .663-.211.921-.46l2.211-2.15 4.599 3.397c.848.467 1.457.227 1.668-.785l3.019-14.228c.309-1.239-.473-1.8-1.282-1.434z"/></svg>
-        </a>
-      </div>
+  </div>
+  <div class="foot-col">
+    <div class="foot-title">Connect</div>
+    <div class="foot-links">
+      <a href="https://t.me/danyamaltsev">hello@tvim.agency</a>
+      <a href="https://t.me/danyamaltsev">Start a project ↗</a>
     </div>
+  </div>
+  <div class="foot-bottom">
+    <span>© 2025 TVIM — Turning Vision Into Mission. All rights reserved.</span>
+    <span>Brands Engineered for Growth</span>
   </div>
 </footer>
 
 <script>
-// Preloader
-window.addEventListener('load', () => {
-  setTimeout(() => {
-    document.getElementById('preloader').classList.add('hidden');
-  }, 1400);
+const cursor = document.getElementById('cursor');
+const ring = document.getElementById('cursorRing');
+let mx = 0, my = 0, rx = 0, ry = 0;
+document.addEventListener('mousemove', e => {
+  mx = e.clientX; my = e.clientY;
+  cursor.style.left = mx + 'px';
+  cursor.style.top = my + 'px';
 });
-
-// Header scroll
-const headerWrap = document.getElementById('headerWrap');
-window.addEventListener('scroll', () => {
-  if (window.scrollY > 60) {
-    headerWrap.classList.add('scrolled');
-  } else {
-    headerWrap.classList.remove('scrolled');
-  }
-}, { passive: true });
-
-// Scroll reveal
+function animRing() {
+  rx += (mx - rx) * .12;
+  ry += (my - ry) * .12;
+  ring.style.left = rx + 'px';
+  ring.style.top = ry + 'px';
+  requestAnimationFrame(animRing);
+}
+animRing();
+document.querySelectorAll('a, button').forEach(el => {
+  el.addEventListener('mouseenter', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(2.5)';
+    ring.style.borderColor = '#2a35ff';
+    ring.style.width = '48px';
+    ring.style.height = '48px';
+  });
+  el.addEventListener('mouseleave', () => {
+    cursor.style.transform = 'translate(-50%,-50%) scale(1)';
+    ring.style.borderColor = 'rgba(0,0,0,.35)';
+    ring.style.width = '32px';
+    ring.style.height = '32px';
+  });
+});
 const reveals = document.querySelectorAll('.reveal');
-const revealObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-      revealObserver.unobserve(entry.target);
-    }
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) { e.target.classList.add('visible'); obs.unobserve(e.target); }
   });
-}, { threshold: 0.15, rootMargin: '0px 0px -40px 0px' });
-reveals.forEach(el => revealObserver.observe(el));
-
-// Smooth anchor scroll
-document.querySelectorAll('a[href^="#"]').forEach(a => {
-  a.addEventListener('click', e => {
-    const target = document.querySelector(a.getAttribute('href'));
-    if (target) {
-      e.preventDefault();
-      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
-    }
-  });
-});
+}, { threshold: 0.08 });
+reveals.forEach(el => obs.observe(el));
+const steps = document.querySelectorAll('.band-step');
+let activeStep = 0;
+setInterval(() => {
+  steps.forEach(s => s.classList.remove('active'));
+  activeStep = (activeStep + 1) % steps.length;
+  steps[activeStep].classList.add('active');
+}, 2000);
 </script>
-
 </body>
 </html>
+
