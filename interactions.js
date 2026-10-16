@@ -93,8 +93,6 @@ services.forEach(detail => {
     updateScroll();
   });
 });
-const stepObserver = new IntersectionObserver(entries => entries.forEach(entry => entry.target.classList.toggle('is-active', entry.isIntersecting)), { rootMargin: '-10% 0px -15% 0px', threshold: .25 });
-document.querySelectorAll('.process-steps article').forEach(step => stepObserver.observe(step));
 const dialog = document.querySelector('#whatsapp-dialog');
 document.querySelectorAll('.whatsapp-demo').forEach(button => button.addEventListener('click', () => {
   if (siteConfig.whatsapp && /^\d{7,15}$/.test(siteConfig.whatsapp)) window.open(`https://wa.me/${siteConfig.whatsapp}`, '_blank', 'noopener');

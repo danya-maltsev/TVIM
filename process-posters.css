@@ -1,0 +1,47 @@
+/* Photo-led process study. Supplied references are temporary local backgrounds. */
+.process-gallery{--poster-top:112px;background:#19191c;color:#f5f5f7;display:block;padding:95px var(--pad) 120px;border-radius:32px;isolation:isolate}
+.process-gallery .process-heading{position:static;display:grid;grid-template-columns:1.4fr 1fr;align-items:end;gap:9%;padding:0 0 65px}
+.process-gallery .process-heading h2{font:500 clamp(38px,4.5vw,72px)/1.08 Manrope,Arial,sans-serif;letter-spacing:-.055em;max-width:850px}
+.process-gallery .process-heading h2 em{color:#99999f}
+.process-gallery .process-heading>p{font-size:16px;line-height:1.7;color:#aaaab0;margin:0 0 5px;max-width:330px;justify-self:end}
+.process-posters{position:relative;min-width:0;padding-bottom:8vh}
+.process-poster{position:sticky;top:var(--poster-top);height:clamp(440px,65svh,640px);margin-bottom:22vh;border-radius:28px;overflow:hidden;background:#243a3c;transform:scale(var(--poster-scale,1));transform-origin:50% 0;box-shadow:none;isolation:isolate}
+.process-poster:last-child{margin-bottom:0}
+.process-photo{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 60%;z-index:-3}
+.process-poster:before{content:'';position:absolute;inset:0;background:linear-gradient(90deg,#071115df 0%,#07111595 28%,#07111518 67%,#07111510),linear-gradient(0deg,#07111575,transparent 65%);z-index:-1}
+.process-poster:after{display:none}
+.poster-caption{height:100%;display:flex;flex-direction:column;justify-content:space-between;padding:clamp(30px,4.2vw,70px);max-width:660px}
+.poster-caption h3{font-size:clamp(36px,4.2vw,68px);font-weight:500;line-height:1.07;letter-spacing:-.055em;max-width:550px;text-wrap:balance}
+.poster-details p{font-size:16px;line-height:1.65;max-width:385px;color:#ffffffde;margin:0}
+.poster-details small{display:block;font-size:12px;color:#fff9;margin-top:25px}
+.photo-listen .process-photo{object-position:50% 72%}
+.photo-words .process-photo{object-position:50% 50%;transform:scale(1.3);transform-origin:50% 46%}
+.photo-character .process-photo{object-position:50% 60%}
+.photo-launch .process-photo{object-position:50% 65%}
+.photo-launch:before{background:linear-gradient(90deg,#122215eb 0%,#1222159c 29%,#1222151c 65%,#12221508),linear-gradient(0deg,#12221560,transparent 70%)}
+/* Header follows the surface under its centre; the progress line stays blue. */
+.nav.is-compact.is-on-dark{background:#333337ed;color:#fff;border-color:#ffffff12;box-shadow:0 8px 28px #0002}
+.nav.is-on-dark .logo,.nav.is-compact.is-on-dark .nav-item{color:#f5f5f7}
+.nav.is-compact.is-on-dark .nav-item:hover{background:#ffffff18;box-shadow:0 6px 16px #0002}
+.nav.is-compact.is-on-dark .nav-item.is-active,.nav.is-compact.is-on-dark .nav-item.is-active:hover{background:#f2f2f4;color:#202024;box-shadow:0 4px 14px #0002}
+.nav.is-on-dark .nav-item:after{background:#353539;color:white}
+@media(max-width:1000px){.process-gallery .process-heading{gap:6%;grid-template-columns:1.5fr 1fr}.process-gallery .process-heading>p{font-size:14px}.poster-caption{max-width:58%;padding:35px}.poster-details p{font-size:14px}.poster-caption h3{font-size:40px}}
+@media(max-width:700px){.process-gallery{--poster-top:94px;padding:60px var(--pad) 80px;border-radius:24px}.process-gallery .process-heading{display:block;padding-bottom:35px}.process-gallery .process-heading h2{font-size:clamp(33px,9vw,48px)}.process-gallery .process-heading>p{margin-top:24px;font-size:13px;max-width:300px}.process-poster{height:clamp(440px,calc(100svh - 145px),590px);border-radius:22px;margin-bottom:18vh}.poster-caption{padding:27px;max-width:none}.poster-caption h3{font-size:clamp(30px,8.6vw,44px);max-width:310px}.poster-details p{font-size:14px;max-width:330px}.poster-details small{font-size:11px;margin-top:20px}.process-poster:before,.photo-launch:before{background:linear-gradient(180deg,#0c151a85 0%,#0c151a10 38%,#0c151aba 75%,#0c151aed 100%)}.process-photo{transform:scale(1.65);transform-origin:50% 58%}.photo-listen .process-photo{transform-origin:50% 100%}.photo-words .process-photo{transform:scale(2.8);transform-origin:50% 46%}.photo-launch .process-photo{transform:scale(1.1)}.photo-character .process-photo{transform:scale(1.1)}}
+@media(max-height:650px){.process-poster{position:relative;top:auto;height:460px;transform:none!important;margin-bottom:24px}.process-poster:after{display:none}.process-posters{padding-bottom:0}}
+@media(prefers-reduced-motion:reduce){.process-poster{position:relative;top:auto;transform:none!important;margin-bottom:24px}.process-poster:after{display:none}.process-posters{padding-bottom:0}}
+
+/* Glossy keycap study: the photograph remains as a WebGL fallback. */
+.photo-character{background:#000}
+.photo-character:before{background:linear-gradient(90deg,#0009,transparent 65%);pointer-events:none}
+.keycap-scene{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.keycap-canvas{display:block;width:100%;height:100%;opacity:0}
+.keycap-fallback{position:absolute;width:100%;height:145%;left:0;top:-22.5%;object-fit:contain}
+.keycap-scene.is-ready .keycap-canvas{opacity:1}
+.keycap-scene.is-ready .keycap-fallback{visibility:hidden}
+.photo-character .poster-caption{position:relative;z-index:1;pointer-events:none}
+@media(max-width:700px){.keycap-fallback{height:100%;top:0;transform:scale(1.25)}.photo-character:before{background:linear-gradient(180deg,#0008,transparent 30%,transparent 58%,#000c)}.photo-character .poster-caption{padding-top:28px}}
+
+/* Final landscape artwork: retain the full composition, remove portrait crops. */
+.photo-listen .process-photo,.photo-words .process-photo,.photo-launch .process-photo{transform:none;object-position:50% 50%}
+.photo-listen:before,.photo-words:before,.photo-launch:before{background:linear-gradient(90deg,#040a1290 0%,#040a1238 34%,transparent 65%),linear-gradient(0deg,#0005,transparent 60%)}
+@media(max-width:700px){.photo-listen .process-photo{object-position:68% 50%}.photo-words .process-photo{object-position:65% 50%}.photo-launch .process-photo{object-position:58% 50%}.photo-listen:before,.photo-words:before,.photo-launch:before{background:linear-gradient(180deg,#050a1270,transparent 38%,#050a1290 72%,#050a12e6)}}
