@@ -45,3 +45,6 @@
 .photo-listen .process-photo,.photo-words .process-photo,.photo-launch .process-photo{transform:none;object-position:50% 50%}
 .photo-listen:before,.photo-words:before,.photo-launch:before{background:linear-gradient(90deg,#040a1290 0%,#040a1238 34%,transparent 65%),linear-gradient(0deg,#0005,transparent 60%)}
 @media(max-width:700px){.photo-listen .process-photo{object-position:68% 50%}.photo-words .process-photo{object-position:65% 50%}.photo-launch .process-photo{object-position:58% 50%}.photo-listen:before,.photo-words:before,.photo-launch:before{background:linear-gradient(180deg,#050a1270,transparent 38%,#050a1290 72%,#050a12e6)}}
+
+/* The dark surface continues beneath the rounded blue contact panel. */
+.process-gallery{border-bottom-left-radius:0;border-bottom-right-radius:0}

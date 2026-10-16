@@ -7,24 +7,36 @@ const coarse = matchMedia('(pointer: coarse)');
 let renderer,frame=0,visible=true,paused=reduced.matches,contextLost=false;
 try {
   renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'low-power'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,coarse.matches?2:2.5));
-  renderer.setClearColor(0x000000,0);
+  renderer.setPixelRatio(Math.min(devicePixelRatio,coarse.matches?1.5:1.75));
+  renderer.setClearColor(0xf5f5f7,0);
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1;
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(34,1,.1,50);camera.position.set(0,0,9);
   const pmrem=new THREE.PMREMGenerator(renderer);
   const room=new RoomEnvironment();
-  const environment=pmrem.fromScene(room,.04);
+  const environment=pmrem.fromScene(room,.025);
   scene.environment=environment.texture;
   room.dispose();pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xffffff,0x64627d,1));
-  const light=new THREE.DirectionalLight(0xffffff,2);light.position.set(-3,5,5);scene.add(light);
-  const fill=new THREE.DirectionalLight(0xa6a3ff,2);fill.position.set(4,-2,3);scene.add(fill);
-  const blue=new THREE.MeshStandardMaterial({color:0x3935ff,metalness:.3,roughness:.21,envMapIntensity:1.2});
-  const chrome=new THREE.MeshStandardMaterial({color:0xe5e7ee,metalness:1,roughness:.12,envMapIntensity:1.5});
-  const dark=new THREE.MeshStandardMaterial({color:0x24242b,metalness:.62,roughness:.2});
-  const white=new THREE.MeshStandardMaterial({color:0xffffff,metalness:.08,roughness:.24});
+  scene.add(new THREE.HemisphereLight(0xffffff,0x64627d,.3));
+  const light=new THREE.DirectionalLight(0xffffff,1.2);light.position.set(-3,5,5);scene.add(light);
+  const fill=new THREE.DirectionalLight(0xa6a3ff,.7);fill.position.set(4,-2,3);scene.add(fill);
+  // Physical transmission and thick coloured glass, sharing the existing environment.
+  renderer.transmissionResolutionScale=.65;
+  const blue=new THREE.MeshPhysicalMaterial({color:0x9b8cff,metalness:0,roughness:.045,transmission:.98,thickness:1.15,ior:1.62,attenuationColor:0x4030ff,attenuationDistance:1.6,clearcoat:1,clearcoatRoughness:.025,envMapIntensity:1.4});
+  const chrome=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.025,transmission:.98,thickness:1.2,ior:1.62,clearcoat:1,envMapIntensity:1.4});
+  const dark=new THREE.MeshPhysicalMaterial({color:0x454652,metalness:.45,roughness:.055,transmission:.55,thickness:.85,ior:1.52,attenuationColor:0x242631,attenuationDistance:.7,clearcoat:1,envMapIntensity:1.5});
+  const white=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.12,transmission:.7,thickness:.85,ior:1.45,clearcoat:1,envMapIntensity:1.1});
+  // Refract the shared studio environment as well as nearby objects; no extra render passes.
+  [blue,chrome,dark,white].forEach(material=>{
+    material.onBeforeCompile=shader=>{
+      shader.fragmentShader=shader.fragmentShader.replace('#include <transmission_pars_fragment>',THREE.ShaderChunk.transmission_pars_fragment.replace(
+        'vec3 attenuatedColor = transmittance * transmittedLight.rgb;',
+        'vec3 studioRefraction = textureCubeUV(envMap, refract(-v, n, 1.0 / ior), roughness).rgb; transmittedLight.rgb = mix(transmittedLight.rgb, studioRefraction, 0.78); transmittedLight.a = 1.0; vec3 attenuatedColor = transmittance * transmittedLight.rgb;'
+      ));
+    };
+    material.customProgramCacheKey=()=> 'studio-glass-v1';
+  });
   const root=new THREE.Group();scene.add(root);
   const items=[];
   function add(geometry,material,position,rotation,scale=1){
@@ -44,11 +56,12 @@ try {
   function resize(){stop();rect=host.getBoundingClientRect();if(!rect.width||!rect.height)return;const wide=innerWidth>700;
     const sceneWidth=wide?rect.width*(innerWidth<=1100?.60:innerWidth>=1900?.50:.56):rect.width;
     const sceneLeft=wide?rect.width-sceneWidth+(innerWidth<=1100?0:innerWidth>=1900?-rect.width*.05:rect.width*.03):0;
-    camera.aspect=sceneWidth/rect.height;
+    camera.position.z=wide?9:8.4;camera.aspect=sceneWidth/rect.height;
     if(wide)camera.setViewOffset(sceneWidth,rect.height,-sceneLeft,0,rect.width,rect.height);else camera.clearViewOffset();
-    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(sceneWidth<600?.84:1);draw(performance.now());}
+    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.12,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.9));root.position.set(wide?0:-.06,wide?0:-.08,0);draw(performance.now());}
   function draw(now){
     frame=0;if(disposed||contextLost)return;
+    if(!paused&&last&&now-last<(coarse.matches?1000/30:1000/60)-.5){frame=requestAnimationFrame(draw);return;}
     const elapsed=now-(last||now),dt=Math.min(elapsed/1000,.035);last=now;
     let changing=!paused;
     if(!paused) idleClock+=dt;

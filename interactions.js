@@ -11,7 +11,10 @@ const trackedSections = ['cases', 'studio', 'contact'].map(id => document.getEle
 let scrollFrame;
 function updateScroll() {
   const max = document.documentElement.scrollHeight - innerHeight;
-  header.classList.toggle('is-compact', scrollY > 90);
+  const compact = header.classList.contains('is-compact') ? scrollY > 60 : scrollY > 110;
+  header.classList.toggle('is-compact', compact);
+  const studioLink = sectionLinks.find(link => link.dataset.section === 'studio');
+  studioLink.tabIndex = innerWidth <= 700 && !compact ? -1 : 0;
   header.style.setProperty('--progress', max > 0 ? Math.min(1, Math.max(0, scrollY / max)) : 0);
   const activationLine = Math.min(innerHeight * .3, 220);
   let active = '';
@@ -73,6 +76,8 @@ document.querySelectorAll('.scroll-preview').forEach((preview, index) => {
   }
   preview.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') setPreview(true); });
   preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') setPreview(false); });
+  preview.addEventListener('focus', () => { if (preview.matches(':focus-visible')) setPreview(true); });
+  preview.addEventListener('blur', () => setPreview(false));
   previewButton.addEventListener('click', () => setPreview(!preview.classList.contains('is-playing')));
   new IntersectionObserver(entries => { if (!entries[0].isIntersecting) setPreview(false); }).observe(preview);
   motion.addEventListener('change', () => setPreview(false));
