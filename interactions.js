@@ -76,7 +76,7 @@ document.querySelectorAll('.scroll-preview').forEach(preview => {
     const rect = preview.getBoundingClientRect();
     const visible = rect.bottom > line && rect.top < innerHeight;
     const active = mobilePreviews.matches
-      ? !motion.matches && rect.top <= line
+      ? !motion.matches && rect.top + rect.height / 2 <= innerHeight / 2
       : hovered || focused;
     setPreview(!document.hidden && visible && active);
   }

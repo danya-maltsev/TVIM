@@ -51,6 +51,8 @@ try {
   add(new THREE.CapsuleGeometry(.15,.62,6,20),chrome,[.2,-1.76,.25],[.2,.4,1.05]);
   add(new THREE.SphereGeometry(.12,20,12),dark,[1.84,.05,.1],[0,0,0]);
   const mouse=new THREE.Vector2(10,10),pointerWorld=new THREE.Vector3(),ray=new THREE.Raycaster(),plane=new THREE.Plane(new THREE.Vector3(0,0,1),0);
+  const touchOrigin=new THREE.Vector3(),touchLocal=new THREE.Vector3(),touchTarget=new THREE.Vector3(),touchOffset=new THREE.Vector3();
+  let touchPointer=null,dragItem=null;
   let inside=false,rect,clock=0,idleClock=0,scrollTarget=0,last=0,disposed=false,metricTime=0,metricFrames=0;
   function resize(){stop();rect=host.getBoundingClientRect();if(!rect.width||!rect.height)return;const wide=innerWidth>700;
     const sceneWidth=wide?rect.width*(innerWidth<=1100?.60:innerWidth>=1900?.50:.56):rect.width;
@@ -68,33 +70,57 @@ try {
     if(!paused){const difference=scrollTarget*3-clock;clock+=difference*(1-Math.exp(-dt*7));changing=changing||Math.abs(difference)>.0001;}
     if(elapsed>0&&!paused){metricTime+=elapsed;metricFrames++;if(metricTime>=1000){canvas.dataset.fps=String(Math.round(metricFrames*1000/metricTime));canvas.dataset.pixelRatio=String(renderer.getPixelRatio());metricTime=0;metricFrames=0;}}
     if(inside){ray.setFromCamera(mouse,camera);ray.ray.intersectPlane(plane,pointerWorld);}
+    if(dragItem){
+      touchLocal.copy(pointerWorld);root.worldToLocal(touchLocal);
+      touchTarget.copy(touchLocal).sub(touchOrigin).add(touchOffset);
+      touchTarget.z=0;touchTarget.clampLength(0,.45);
+    }
     items.forEach((item,i)=>{
       const dx=item.mesh.position.x-pointerWorld.x,dy=item.mesh.position.y-pointerWorld.y;
-      const distance=Math.sqrt(dx*dx+dy*dy),strength=inside&&!paused?Math.max(0,1-distance/2.1)*1.25:0;
-      const targetX=distance>.001?dx/distance*strength:0,targetY=distance>.001?dy/distance*strength:0;
+      const distance=Math.sqrt(dx*dx+dy*dy),strength=inside&&!paused&&touchPointer===null?Math.max(0,1-distance/2.1)*1.25:0;
+      const targetX=item===dragItem?touchTarget.x:distance>.001?dx/distance*strength:0,targetY=item===dragItem?touchTarget.y:distance>.001?dy/distance*strength:0;
       const blend=1-Math.exp(-dt*7);
       if(Math.abs(targetX-item.offset.x)+Math.abs(targetY-item.offset.y)>.0001)changing=true;
       item.offset.x+=(targetX-item.offset.x)*blend;item.offset.y+=(targetY-item.offset.y)*blend;
       item.mesh.position.set(item.base.x+item.offset.x+Math.sin(idleClock*.32+item.seed)*.055,item.base.y+item.offset.y+Math.sin(clock*.7+idleClock*.48+item.seed)*.12,item.base.z+Math.sin(clock+idleClock*.22+item.seed)*.1);
       item.mesh.rotation.set(item.rotation.x+Math.sin(clock*.35+idleClock*.28+item.seed)*.16,item.rotation.y+Math.sin(clock*.22+idleClock*.23+item.seed)*.32,item.rotation.z+Math.cos(clock*.35+idleClock*.3+item.seed)*.1);
     });
-    const rotationTarget=(inside&&!paused?mouse.x*.095:0);
+    const rotationTarget=(inside&&!paused&&touchPointer===null?mouse.x*.095:0);
     if(Math.abs(rotationTarget-root.rotation.y)>.0001)changing=true;
-    root.rotation.y+=( (inside&&!paused?mouse.x*.095:0)-root.rotation.y)*(1-Math.exp(-dt*3));
+    root.rotation.y+=(rotationTarget-root.rotation.y)*(1-Math.exp(-dt*3));
     renderer.render(scene,camera);host.classList.add('ready');
     if(changing&&!paused&&visible&&!document.hidden&&!contextLost)frame=requestAnimationFrame(draw);
     host.dataset.rendering=frame?"active":"idle";
   }
   function start(){if(ready&&!frame&&!paused&&visible&&!document.hidden&&!contextLost&&!disposed){last=0;metricTime=0;metricFrames=0;frame=requestAnimationFrame(draw);}}
   function stop(){cancelAnimationFrame(frame);frame=0;last=0;host.dataset.rendering="idle";}
-  host.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||paused)return;rect=host.getBoundingClientRect();inside=true;mouse.set((e.clientX-rect.left)/rect.width*2-1,-(e.clientY-rect.top)/rect.height*2+1);start();},{passive:true});
-  host.addEventListener('pointerleave',()=>{inside=false;mouse.set(10,10);start();});
+  function movePointer(e){rect=host.getBoundingClientRect();inside=true;mouse.set(THREE.MathUtils.clamp((e.clientX-rect.left)/rect.width*2-1,-1,1),THREE.MathUtils.clamp(-(e.clientY-rect.top)/rect.height*2+1,-1,1));start();}
+  function releaseTouch(){
+    const pointer=touchPointer;touchPointer=null;dragItem=null;inside=false;mouse.set(10,10);
+    if(pointer!==null&&canvas.hasPointerCapture(pointer))canvas.releasePointerCapture(pointer);
+    start();
+  }
+  host.addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'||paused||!ready)return;
+    if(!e.isPrimary){releaseTouch();return;}
+    movePointer(e);root.updateWorldMatrix(true,true);ray.setFromCamera(mouse,camera);
+    const hit=ray.intersectObjects(root.children,false)[0];
+    if(!hit){inside=false;return;}
+    dragItem=items.find(item=>item.mesh===hit.object);touchPointer=e.pointerId;
+    ray.ray.intersectPlane(plane,pointerWorld);
+    touchOrigin.copy(pointerWorld);root.worldToLocal(touchOrigin);touchOffset.copy(dragItem.offset);
+    canvas.setPointerCapture(e.pointerId);
+  },{passive:true});
+  host.addEventListener('pointermove',e=>{if(paused)return;if(e.pointerType==='mouse'&&touchPointer===null||e.pointerId===touchPointer)movePointer(e);},{passive:true});
+  // Keep native vertical scrolling; the browser cancels the drag when a swipe becomes a scroll.
+  ['pointerup','pointercancel','lostpointercapture'].forEach(type=>host.addEventListener(type,e=>{if(e.pointerId===touchPointer)releaseTouch();},{passive:true}));
+  host.addEventListener('pointerleave',()=>{if(touchPointer===null){inside=false;mouse.set(10,10);start();}});
   function onScroll(){if(reduced.matches||paused)return;const hero=document.querySelector('.hero').getBoundingClientRect();scrollTarget=THREE.MathUtils.clamp(-hero.top/hero.height,0,1);start();}
   window.addEventListener('scroll',onScroll,{passive:true});
   const ro=new ResizeObserver(resize);ro.observe(host);
   const io=new IntersectionObserver(entries=>{visible=entries[0].isIntersecting;if(visible)start();else stop();},{threshold:.01});io.observe(host);
-  document.addEventListener('visibilitychange',()=>{if(document.hidden)stop();else start();});
-  reduced.addEventListener('change',()=>{paused=reduced.matches;if(paused)stop();else start();});
+  document.addEventListener('visibilitychange',()=>{if(document.hidden){releaseTouch();stop();}else start();});
+  reduced.addEventListener('change',()=>{paused=reduced.matches;if(paused){releaseTouch();stop();}else start();});
   canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();contextLost=true;stop();host.classList.remove('ready');});
   canvas.addEventListener('webglcontextrestored',()=>location.reload());
   window.addEventListener('pagehide',event=>{stop();if(event.persisted)return;disposed=true;io.disconnect();ro.disconnect();items.forEach(i=>i.mesh.geometry.dispose());[blue,chrome,dark,white].forEach(m=>m.dispose());environment.dispose();renderer.dispose();});
