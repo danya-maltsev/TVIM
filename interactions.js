@@ -8,6 +8,7 @@ const motion = matchMedia('(prefers-reduced-motion: reduce)');
 const header = document.querySelector('.nav');
 const sectionLinks = [...header.querySelectorAll('[data-section]')];
 const trackedSections = ['cases', 'studio', 'contact'].map(id => document.getElementById(id));
+const previewScrollUpdates = [];
 let scrollFrame;
 function updateScroll() {
   const max = document.documentElement.scrollHeight - innerHeight;
@@ -28,6 +29,8 @@ function updateScroll() {
     if (selected) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
   });
+  const previewLine = header.getBoundingClientRect().bottom;
+  previewScrollUpdates.forEach(update => update(previewLine));
   scrollFrame = null;
 }
 addEventListener('scroll', () => { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll); }, { passive: true });
@@ -61,19 +64,32 @@ new IntersectionObserver(entries => { heroVisible = entries[0].isIntersecting; i
 document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else schedule(); });
 motion.addEventListener('change', resetType);
 schedule();
+const mobilePreviews = matchMedia('(max-width: 700px)');
 document.querySelectorAll('.scroll-preview').forEach(preview => {
+  let hovered = false, focused = false;
   function setPreview(on) {
     const playing = on && !motion.matches;
     preview.classList.toggle('is-open', on);
     preview.classList.toggle('is-playing', playing);
   }
-  preview.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') setPreview(true); });
-  preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') setPreview(false); });
-  preview.addEventListener('focus', () => { if (preview.matches(':focus-visible')) setPreview(true); });
-  preview.addEventListener('blur', () => setPreview(false));
+  function syncPreview(line = header.getBoundingClientRect().bottom) {
+    const rect = preview.getBoundingClientRect();
+    const visible = rect.bottom > line && rect.top < innerHeight;
+    const active = mobilePreviews.matches
+      ? !motion.matches && rect.top <= line
+      : hovered || focused;
+    setPreview(!document.hidden && visible && active);
+  }
+  previewScrollUpdates.push(syncPreview);
+  preview.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') { hovered = true; syncPreview(); } });
+  preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hovered = false; syncPreview(); } });
+  preview.addEventListener('focus', () => { focused = preview.matches(':focus-visible'); syncPreview(); });
+  preview.addEventListener('blur', () => { focused = false; syncPreview(); });
   new IntersectionObserver(entries => { if (!entries[0].isIntersecting) setPreview(false); }).observe(preview);
-  motion.addEventListener('change', () => setPreview(false));
-  document.addEventListener('visibilitychange', () => { if (document.hidden) setPreview(false); });
+  motion.addEventListener('change', () => syncPreview());
+  mobilePreviews.addEventListener('change', () => syncPreview());
+  document.addEventListener('visibilitychange', () => syncPreview());
+  syncPreview();
 });
 const services = [...document.querySelectorAll('.services > details')];
 services.forEach(detail => {

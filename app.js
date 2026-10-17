@@ -57,7 +57,7 @@ try {
     const sceneLeft=wide?rect.width-sceneWidth+(innerWidth<=1100?0:innerWidth>=1900?-rect.width*.05:rect.width*.03):0;
     camera.position.z=wide?9:8.4;camera.aspect=sceneWidth/rect.height;
     if(wide)camera.setViewOffset(sceneWidth,rect.height,-sceneLeft,0,rect.width,rect.height);else camera.clearViewOffset();
-    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.12,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.9));root.position.set(wide?0:-.06,wide?0:-.08,0);if(ready)draw(performance.now());}
+    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.26,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.65));root.position.set(wide?0:-.06,wide?0:-.08,0);if(ready)draw(performance.now());}
   function draw(now){
     frame=0;if(!ready||disposed||contextLost)return;
     // Render on every display refresh. A fixed 60/30 FPS gate skipped frames
