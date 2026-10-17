@@ -119,7 +119,7 @@ syncArtVisibility();
 new ResizeObserver(() => { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll); }).observe(document.body);
 
 // Cycle accent colours once per selection gesture; preserve native selection.
-const selectionPalette=[['#3a36ff','#ffffff'],['#caff7e','#19191d'],['#ffb9cf','#19191d'],['#bcb1ff','#19191d']];
+const selectionPalette=[['#3a36ff','#ffffff'],['#caff7e','#19191d']];
 let selectionAccent=0;
 function nextSelectionAccent(){
   const [background,ink]=selectionPalette[selectionAccent++%selectionPalette.length];
