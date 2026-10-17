@@ -70,15 +70,16 @@ document.querySelectorAll('.scroll-preview').forEach((preview, index) => {
   preview.after(previewButton);
   function setPreview(on) {
     const playing = on && !motion.matches;
+    preview.classList.toggle('is-open', on);
     preview.classList.toggle('is-playing', playing);
-    previewButton.textContent = playing ? 'Ⅱ Остановить превью' : '▷ Смотреть превью';
-    previewButton.setAttribute('aria-pressed', String(playing));
+    previewButton.textContent = on ? '× Скрыть превью' : '▷ Смотреть превью';
+    previewButton.setAttribute('aria-pressed', String(on));
   }
   preview.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') setPreview(true); });
   preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') setPreview(false); });
   preview.addEventListener('focus', () => { if (preview.matches(':focus-visible')) setPreview(true); });
   preview.addEventListener('blur', () => setPreview(false));
-  previewButton.addEventListener('click', () => setPreview(!preview.classList.contains('is-playing')));
+  previewButton.addEventListener('click', () => setPreview(!preview.classList.contains('is-open')));
   new IntersectionObserver(entries => { if (!entries[0].isIntersecting) setPreview(false); }).observe(preview);
   motion.addEventListener('change', () => setPreview(false));
   document.addEventListener('visibilitychange', () => { if (document.hidden) setPreview(false); });
@@ -116,3 +117,16 @@ function syncArtVisibility() { document.body.classList.toggle('page-hidden', doc
 document.addEventListener('visibilitychange', syncArtVisibility);
 syncArtVisibility();
 new ResizeObserver(() => { if (!scrollFrame) scrollFrame = requestAnimationFrame(updateScroll); }).observe(document.body);
+
+// Cycle accent colours once per selection gesture; preserve native selection.
+const selectionPalette=[['#3a36ff','#ffffff'],['#caff7e','#19191d'],['#ffb9cf','#19191d'],['#bcb1ff','#19191d']];
+let selectionAccent=0;
+function nextSelectionAccent(){
+  const [background,ink]=selectionPalette[selectionAccent++%selectionPalette.length];
+  document.documentElement.style.setProperty('--selection-bg',background);
+  document.documentElement.style.setProperty('--selection-ink',ink);
+}
+document.addEventListener('selectstart',nextSelectionAccent);
+document.addEventListener('keydown',event=>{
+  if((event.ctrlKey||event.metaKey)&&event.key.toLowerCase()==='a')nextSelectionAccent();
+});

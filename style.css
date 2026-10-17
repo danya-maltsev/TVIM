@@ -199,3 +199,52 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 /* Bare social icons retain a generous click target. */
 .social-links>a,.social-links>button{border:0;border-radius:0;background:transparent}
 .social-links>a:hover,.social-links>button:hover{background:transparent;color:var(--blue);transform:translateY(-2px)}
+
+/* Two case-cover directions: luminous FAVN and a dark MBL studio. */
+.project-favn .scroll-preview,.project-mbl .scroll-preview{padding:0;background:#d7d1e6;perspective:1000px}
+.project-mbl .scroll-preview{background:#181a1f}
+.project-cover{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;justify-content:space-between;padding:30px;overflow:hidden;transition:opacity .5s var(--ease),transform .75s var(--ease),visibility .5s;pointer-events:none}
+.cover-favn{color:#24202d;background:radial-gradient(ellipse at 18% 10%,#f8e9dc 0,transparent 53%),radial-gradient(ellipse at 90% 94%,#a8a0ef 0,transparent 62%),linear-gradient(130deg,#e8e1ed,#d0c9e7)}
+.cover-favn:before{content:'';position:absolute;width:140%;height:42%;left:-20%;top:20%;transform:rotate(-32deg);background:linear-gradient(180deg,#ffffff00,#ffffff6b,#ffffff00);pointer-events:none}
+.cover-kicker,.cover-footer{font-size:9px;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:1}
+.cover-logo-favn{width:68%;max-width:370px;height:auto;object-fit:contain;align-self:center;position:relative;z-index:1}
+.cover-footer{display:flex;align-items:end;justify-content:space-between;gap:20px}
+.cover-cue{opacity:.65;text-align:right}
+.cover-mbl{color:#f3eee8;background:radial-gradient(ellipse 80% 110% at 90% 5%,#756958 0%,#333337 38%,#17191f 78%)}
+.cover-mbl:before{content:'';position:absolute;inset:0;background:linear-gradient(118deg,transparent 36%,#ffffff10 36.2%,transparent 60%)}
+.cover-wordmark{position:relative;z-index:1;align-self:center;text-align:center;font-size:clamp(70px,9vw,145px);font-weight:700;line-height:1;letter-spacing:-.07em}
+.cover-wordmark>span{display:block;font-size:10px;font-weight:400;line-height:1.5;letter-spacing:.22em;text-transform:uppercase;margin-top:18px}
+.mockup-stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 25% 0%,#f3ede2 0%,#d0c6d2 50%,#938899 100%);perspective:1100px}
+.mockup-stage:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,#fff6 0,transparent 40%,#fff1 70%,transparent);pointer-events:none}
+.project-mbl .mockup-stage{background:radial-gradient(ellipse at 72% 8%,#8b7b66 0,#454044 28%,#22232a 60%,#111216 100%)}
+.device-mockup{position:absolute;left:10%;right:10%;top:20%;transform:perspective(1100px) rotateX(8deg) rotateY(-12deg) rotateZ(-4deg) translateY(10px);transform-style:preserve-3d;transition:transform .9s var(--ease)}
+.project-mbl .device-mockup{transform:perspective(1100px) rotateX(8deg) rotateY(10deg) rotateZ(3deg) translateY(10px)}
+.device-mockup .preview-browser{position:relative;border:6px solid #18191d;border-bottom-width:10px;border-radius:11px 11px 5px 5px;box-shadow:0 25px 50px #16101f35;transform:none!important;background:#18191d;overflow:hidden}
+.device-mockup .browser-chrome{height:18px;background:#ececf0}
+.device-mockup .preview-window{aspect-ratio:1280/720}
+.project-favn .device-mockup .preview-window{aspect-ratio:1280/686}
+.device-deck{position:absolute;left:-7%;right:-7%;top:calc(100% - 1px);height:12px;background:linear-gradient(90deg,#777b82,#e6e8ee 9%,#b1b5bf 30%,#f1f2f6 60%,#9ba0a8 90%,#626670);border-radius:1px 1px 55% 55%;box-shadow:0 25px 25px #0004}
+.device-deck:before{content:'';position:absolute;left:40%;right:40%;top:0;height:4px;background:linear-gradient(#747780,#b5b9c1);border-radius:0 0 7px 7px}
+.mockup-label{position:absolute;left:30px;bottom:25px;font-size:8px;letter-spacing:.17em;color:#29233099}
+.project-mbl .mockup-label{color:#ffffff8c}
+.scroll-preview:is(.is-open,:focus-visible) .project-cover{opacity:0;visibility:hidden;transform:translateY(-12px) scale(1.025)}
+.scroll-preview:is(.is-open,:focus-visible) .device-mockup{transform:perspective(1100px) rotateX(4deg) rotateY(-3deg) rotateZ(-1deg)}
+.project-mbl .scroll-preview:is(.is-open,:focus-visible) .device-mockup{transform:perspective(1100px) rotateX(4deg) rotateY(3deg) rotateZ(1deg)}
+.project-cover~.project-open{z-index:3}
+@media(max-width:700px){
+ .project-cover{padding:23px}
+ .cover-kicker,.cover-footer{font-size:8px;letter-spacing:.06em}
+ .cover-cue{display:none}
+ .cover-logo-favn{width:75%}
+ .cover-wordmark{font-size:clamp(75px,23vw,130px)}
+ .cover-wordmark>span{font-size:8px;letter-spacing:.14em;margin-top:12px}
+ .device-mockup{left:7%;right:7%;top:21%}
+ .device-mockup .preview-browser{border-width:5px;border-bottom-width:8px;border-radius:8px 8px 4px 4px}
+ .device-mockup .browser-chrome{height:15px}
+ .device-deck{height:9px}
+ .mockup-label{left:23px;bottom:22px;font-size:7px}
+}
+/* Selection changes on each new selection, never while dragging. */
+::selection{background:var(--selection-bg,#3a36ff);color:var(--selection-ink,#fff)}
+::-moz-selection{background:var(--selection-bg,#3a36ff);color:var(--selection-ink,#fff)}
+@media(hover:none),(max-width:700px){.project-favn>.preview-toggle,.project-mbl>.preview-toggle{display:inline-flex}}
