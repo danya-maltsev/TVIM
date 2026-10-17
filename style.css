@@ -138,6 +138,10 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 @media(min-width:701px){.hero{overflow:visible;z-index:4}.hero .scene{left:0;right:0;width:100%;z-index:5;pointer-events:none}.hero .scene canvas{pointer-events:auto}.hero-copy a,.hero-copy button{position:relative;z-index:6}.hero-copy{z-index:auto}.hero-foot{z-index:6}}
 @media(prefers-reduced-motion:reduce){.nav .nav-progress{transition:none}}
 
+/* Keep the typewriter line stable when its text is completely erased. */
+.type-line{height:1.15em;vertical-align:top;line-height:1.15}
+.split-grid>.split-cell:only-child{grid-column:1/-1}
+
 /* 17 October: glass hero, predictable previews and a clear contact action. */
 .scroll-preview:is(.is-playing,:focus-visible) .preview-browser,
 .project-mbl .scroll-preview:is(.is-playing,:focus-visible) .preview-browser{transform:perspective(1100px) rotateX(0) rotateY(0) rotateZ(0) scale(1.02);transition-duration:.45s}
