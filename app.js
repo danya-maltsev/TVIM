@@ -7,7 +7,10 @@ const coarse = matchMedia('(pointer: coarse)');
 let renderer,frame=0,visible=true,paused=reduced.matches,contextLost=false;
 try {
   renderer = new THREE.WebGLRenderer({canvas,antialias:true,alpha:true,powerPreference:'low-power'});
-  renderer.setPixelRatio(Math.min(devicePixelRatio,coarse.matches?1.5:1.75));
+  // Bound fragment work on Retina/4K screens; keep CSS size and camera framing.
+  let qualityScale=1;
+  const pixelBudget=coarse.matches?900000:1800000;
+  function pixelRatio(width,height){return Math.min(devicePixelRatio,coarse.matches?1.1:1.25,Math.sqrt(pixelBudget/(width*height)))*qualityScale;}
   renderer.setClearColor(0xf5f5f7,0);
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
   renderer.toneMappingExposure=1;
@@ -21,21 +24,30 @@ try {
   scene.add(new THREE.HemisphereLight(0xffffff,0x64627d,.3));
   const light=new THREE.DirectionalLight(0xffffff,1.2);light.position.set(-3,5,5);scene.add(light);
   const fill=new THREE.DirectionalLight(0xa6a3ff,.7);fill.position.set(4,-2,3);scene.add(fill);
-  // Physical transmission and thick coloured glass, sharing the existing environment.
-  renderer.transmissionResolutionScale=.65;
-  const blue=new THREE.MeshPhysicalMaterial({color:0x9b8cff,metalness:0,roughness:.045,transmission:.98,thickness:1.15,ior:1.62,attenuationColor:0x4030ff,attenuationDistance:1.6,clearcoat:1,clearcoatRoughness:.025,envMapIntensity:1.4});
-  const chrome=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.025,transmission:.98,thickness:1.2,ior:1.62,clearcoat:1,envMapIntensity:1.4});
-  const dark=new THREE.MeshPhysicalMaterial({color:0x454652,metalness:.45,roughness:.055,transmission:.55,thickness:.85,ior:1.52,attenuationColor:0x242631,attenuationDistance:.7,clearcoat:1,envMapIntensity:1.5});
-  const white=new THREE.MeshPhysicalMaterial({color:0xffffff,metalness:0,roughness:.12,transmission:.7,thickness:.85,ior:1.45,clearcoat:1,envMapIntensity:1.1});
-  // Refract the shared studio environment as well as nearby objects; no extra render passes.
-  [blue,chrome,dark,white].forEach(material=>{
+  // Studio glass: sample the prefiltered environment instead of refracting a
+  // freshly rendered scene. transmission stays zero: no transmission target,
+  // multisample resolve, mipmap generation or bicubic screen-space sampling.
+  const blue=new THREE.MeshPhysicalMaterial({color:0x6240ff,metalness:0,roughness:.045,ior:1.62,clearcoat:1,clearcoatRoughness:.025,envMapIntensity:1.4});
+  const chrome=new THREE.MeshPhysicalMaterial({color:0xf4f5ff,metalness:0,roughness:.025,ior:1.62,clearcoat:1,envMapIntensity:1.4});
+  const dark=new THREE.MeshPhysicalMaterial({color:0x292a36,metalness:.45,roughness:.055,ior:1.52,clearcoat:1,envMapIntensity:1.5});
+  const white=new THREE.MeshPhysicalMaterial({color:0xf2f3ff,metalness:0,roughness:.12,ior:1.45,clearcoat:1,envMapIntensity:1.1});
+  [blue,chrome,dark,white].forEach((material,index)=>{
+    const blend=index===2?.42:.86;
     material.onBeforeCompile=shader=>{
-      shader.fragmentShader=shader.fragmentShader.replace('#include <transmission_pars_fragment>',THREE.ShaderChunk.transmission_pars_fragment.replace(
-        'vec3 attenuatedColor = transmittance * transmittedLight.rgb;',
-        'vec3 studioRefraction = textureCubeUV(envMap, refract(-v, n, 1.0 / ior), roughness).rgb; transmittedLight.rgb = mix(transmittedLight.rgb, studioRefraction, 0.78); transmittedLight.a = 1.0; vec3 attenuatedColor = transmittance * transmittedLight.rgb;'
-      ));
+      shader.fragmentShader=shader.fragmentShader.replace('#include <opaque_fragment>',`
+        #ifdef ENVMAP_TYPE_CUBE_UV
+          vec3 studioNormal = inverseTransformDirection(normal, viewMatrix);
+          vec3 studioView = inverseTransformDirection(geometryViewDir, viewMatrix);
+          vec3 studioRay = refract(-studioView, studioNormal, 1.0 / ior);
+          vec3 studioGlass = textureCubeUV(envMap, envMapRotation * studioRay, roughnessFactor).rgb;
+          float studioEdge = pow(1.0 - saturate(dot(normal, geometryViewDir)), 3.0);
+          studioGlass *= mix(vec3(1.0), diffuseColor.rgb, 0.85 + 0.15 * studioEdge);
+          outgoingLight = mix(outgoingLight, studioGlass, ${blend.toFixed(2)} * (1.0 - 0.6 * studioEdge)) + totalSpecular * 0.25;
+        #endif
+        #include <opaque_fragment>
+      `);
     };
-    material.customProgramCacheKey=()=> 'studio-glass-v1';
+    material.customProgramCacheKey=()=> 'studio-glass-lite-v1-'+blend;
   });
   const root=new THREE.Group();scene.add(root);
   const items=[];
@@ -43,10 +55,10 @@ try {
     const mesh=new THREE.Mesh(geometry,material);mesh.position.set(...position);mesh.rotation.set(...rotation);mesh.scale.setScalar(scale);root.add(mesh);
     items.push({mesh,base:mesh.position.clone(),rotation:mesh.rotation.clone(),offset:new THREE.Vector3(),velocity:new THREE.Vector3(),seed:items.length*1.7});return mesh;
   }
-  add(new THREE.TorusGeometry(.93,.29,32,96),blue,[.25,.25,.4],[.48,-.55,-.5],1.38);
-  add(new THREE.SphereGeometry(.62,48,32),chrome,[-1.1,1.48,.3],[0,0,0]);
-  add(new THREE.CapsuleGeometry(.28,1.2,12,32),blue,[1.5,1.53,-.35],[.4,.15,-.72]);
-  add(new THREE.TorusGeometry(.48,.2,24,64),dark,[-1.4,-1.05,.35],[.5,.5,.4]);
+  add(new THREE.TorusGeometry(.93,.29,24,72),blue,[.25,.25,.4],[.48,-.55,-.5],1.38);
+  add(new THREE.SphereGeometry(.62,40,24),chrome,[-1.1,1.48,.3],[0,0,0]);
+  add(new THREE.CapsuleGeometry(.28,1.2,8,24),blue,[1.5,1.53,-.35],[.4,.15,-.72]);
+  add(new THREE.TorusGeometry(.48,.2,20,56),dark,[-1.4,-1.05,.35],[.5,.5,.4]);
   add(new THREE.OctahedronGeometry(.63,0),white,[1.55,-1.13,.1],[.2,.5,.4]);
   add(new THREE.SphereGeometry(.21,24,16),blue,[-1.48,-.06,1],[0,0,0]);
   add(new THREE.CapsuleGeometry(.15,.62,6,20),chrome,[.2,-1.76,.25],[.2,.4,1.05]);
@@ -58,7 +70,7 @@ try {
     const sceneLeft=wide?rect.width-sceneWidth+(innerWidth<=1100?0:innerWidth>=1900?-rect.width*.05:rect.width*.03):0;
     camera.position.z=wide?9:8.4;camera.aspect=sceneWidth/rect.height;
     if(wide)camera.setViewOffset(sceneWidth,rect.height,-sceneLeft,0,rect.width,rect.height);else camera.clearViewOffset();
-    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.12,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.9));root.position.set(wide?0:-.06,wide?0:-.08,0);draw(performance.now());}
+    camera.updateProjectionMatrix();renderer.setPixelRatio(pixelRatio(rect.width,rect.height));renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.12,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.9));root.position.set(wide?0:-.06,wide?0:-.08,0);draw(performance.now());}
   function draw(now){
     frame=0;if(disposed||contextLost)return;
     if(!paused&&last&&now-last<(coarse.matches?1000/30:1000/60)-.5){frame=requestAnimationFrame(draw);return;}
@@ -66,7 +78,14 @@ try {
     let changing=!paused;
     if(!paused) idleClock+=dt;
     if(!paused){const difference=scrollTarget*3-clock;clock+=difference*(1-Math.exp(-dt*7));changing=changing||Math.abs(difference)>.0001;}
-    if(elapsed>0&&!paused){metricTime+=elapsed;metricFrames++;if(metricTime>=1000){canvas.dataset.fps=String(Math.round(metricFrames*1000/metricTime));canvas.dataset.pixelRatio=String(renderer.getPixelRatio());metricTime=0;metricFrames=0;}}
+    if(elapsed>0&&!paused){metricTime+=elapsed;metricFrames++;if(metricTime>=2000){
+      const fps=metricFrames*1000/metricTime;
+      canvas.dataset.fps=String(Math.round(fps));
+      // Lower resolution gradually only under sustained load, without touching
+      // animation speed, object placement or CSS layout. Avoid quality thrash.
+      if(fps<(coarse.matches?24:45)&&qualityScale>.7){qualityScale=Math.max(.7,qualityScale-.1);renderer.setPixelRatio(pixelRatio(rect.width,rect.height));}
+      canvas.dataset.pixelRatio=String(renderer.getPixelRatio());metricTime=0;metricFrames=0;
+    }}
     ray.setFromCamera(mouse,camera);ray.ray.intersectPlane(plane,pointerWorld);
     items.forEach((item,i)=>{
       const dx=item.mesh.position.x-pointerWorld.x,dy=item.mesh.position.y-pointerWorld.y;
@@ -81,7 +100,7 @@ try {
     const rotationTarget=(inside&&!paused?mouse.x*.095:0);
     if(Math.abs(rotationTarget-root.rotation.y)>.0001)changing=true;
     root.rotation.y+=( (inside&&!paused?mouse.x*.095:0)-root.rotation.y)*(1-Math.exp(-dt*3));
-    renderer.render(scene,camera);host.classList.add('ready');
+    renderer.render(scene,camera);host.classList.add('ready');canvas.dataset.drawCalls=String(renderer.info.render.calls);canvas.dataset.triangles=String(renderer.info.render.triangles);
     if(changing&&!paused&&visible&&!document.hidden&&!contextLost)frame=requestAnimationFrame(draw);
     host.dataset.rendering=frame?"active":"idle";
   }

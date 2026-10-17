@@ -85,8 +85,8 @@ if (host) {
 
     let frame=0,last=0,elapsed=0,visible=false,lost=false,disposed=false,draws=0;
     function pose() {
-      key.rotation.set(-.58+Math.sin(elapsed*1.15)*.11, -.38+Math.sin(elapsed*.95)*.32, .35+Math.cos(elapsed*.85)*.065);
-      key.position.y=Math.sin(elapsed*.9)*.06;
+      key.rotation.set(-.58+Math.sin(elapsed*.55)*.07, -.38+Math.sin(elapsed*.42)*.22, .35+Math.cos(elapsed*.36)*.04);
+      key.position.y=Math.sin(elapsed*.5)*.045;
     }
     function draw() {
       if (disposed || lost || document.hidden) return;

@@ -140,7 +140,6 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 
 /* Keep the typewriter line stable when its text is completely erased. */
 .type-line{height:1.15em;vertical-align:top;line-height:1.15}
-.split-grid>.split-cell:only-child{grid-column:1/-1}
 
 /* 17 October: glass hero, predictable previews and a clear contact action. */
 .scroll-preview:is(.is-playing,:focus-visible) .preview-browser,
