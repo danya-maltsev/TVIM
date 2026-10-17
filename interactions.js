@@ -9,8 +9,18 @@ const header = document.querySelector('.nav');
 const sectionLinks = [...header.querySelectorAll('[data-section]')];
 const trackedSections = ['cases', 'studio', 'contact'].map(id => document.getElementById(id));
 const previewScrollUpdates = [];
+let previewDirection = 0, previewTurn = 0, previewTurnY = scrollY, previewAnchor = scrollY;
 let scrollFrame;
 function updateScroll() {
+  // Ignore tiny scroll reversals so an inertial gesture cannot flicker the covers.
+  const previewDelta = scrollY - previewAnchor;
+  if (previewDelta * previewDirection > 0) previewAnchor = scrollY;
+  else if (Math.abs(previewDelta) >= 8) {
+    previewDirection = Math.sign(previewDelta);
+    previewTurnY = previewAnchor;
+    previewAnchor = scrollY;
+    previewTurn++;
+  }
   const max = document.documentElement.scrollHeight - innerHeight;
   const compact = header.classList.contains('is-compact') ? scrollY > 60 : scrollY > 110;
   header.classList.toggle('is-compact', compact);
@@ -67,17 +77,51 @@ schedule();
 const mobilePreviews = matchMedia('(max-width: 700px)');
 document.querySelectorAll('.scroll-preview').forEach(preview => {
   let hovered = false, focused = false;
+  let mobileStarted = false, mobileArmed = false, mobileTurn = -1, resetTimer;
   function setPreview(on) {
     const playing = on && !motion.matches;
-    preview.classList.toggle('is-open', on);
-    preview.classList.toggle('is-playing', playing);
+    if (on) {
+      if (preview.classList.contains('is-open')) { preview.classList.toggle('is-playing', playing); return; }
+      clearTimeout(resetTimer);
+      if (preview.classList.contains('is-resetting')) {
+        preview.classList.remove('is-playing', 'is-resetting');
+        // Restart at the first frame if a new pass interrupts the cover's return.
+        void preview.offsetWidth;
+      }
+      preview.classList.add('is-open');
+      preview.classList.toggle('is-playing', playing);
+    } else if (motion.matches || document.hidden) {
+      clearTimeout(resetTimer);
+      preview.classList.remove('is-open', 'is-playing', 'is-resetting');
+    } else if (preview.classList.contains('is-open')) {
+      preview.classList.remove('is-open');
+      if (preview.classList.contains('is-playing') && !motion.matches && !document.hidden) {
+        // Freeze the mockup until the returning cover hides it, then rewind.
+        preview.classList.add('is-resetting');
+        resetTimer = setTimeout(() => preview.classList.remove('is-playing', 'is-resetting'), 500);
+      } else preview.classList.remove('is-playing', 'is-resetting');
+    }
   }
   function syncPreview(line = header.getBoundingClientRect().bottom) {
     const rect = preview.getBoundingClientRect();
     const visible = rect.bottom > line && rect.top < innerHeight;
-    const active = mobilePreviews.matches
-      ? !motion.matches && rect.top + rect.height / 2 <= innerHeight / 2
-      : hovered || focused;
+    const centerDelta = rect.top + rect.height / 2 - innerHeight / 2;
+    if (mobileTurn !== previewTurn) {
+      mobileTurn = previewTurn;
+      mobileStarted = false;
+      mobileArmed = previewDirection * (scrollY + centerDelta - previewTurnY) > 0;
+    }
+    if (document.hidden || motion.matches || !mobilePreviews.matches) {
+      mobileStarted = false;
+      mobileArmed = false;
+    } else if (!visible) {
+      mobileStarted = false;
+      mobileArmed = previewDirection * centerDelta > 0;
+    } else {
+      if (previewDirection * centerDelta > 0) mobileArmed = true;
+      if (mobileArmed && previewDirection * centerDelta <= 0) mobileStarted = true;
+    }
+    const active = mobilePreviews.matches ? mobileStarted : hovered || focused;
     setPreview(!document.hidden && visible && active);
   }
   previewScrollUpdates.push(syncPreview);
@@ -85,7 +129,7 @@ document.querySelectorAll('.scroll-preview').forEach(preview => {
   preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') { hovered = false; syncPreview(); } });
   preview.addEventListener('focus', () => { focused = preview.matches(':focus-visible'); syncPreview(); });
   preview.addEventListener('blur', () => { focused = false; syncPreview(); });
-  new IntersectionObserver(entries => { if (!entries[0].isIntersecting) setPreview(false); }).observe(preview);
+  new IntersectionObserver(entries => { if (!entries[0].isIntersecting) { mobileStarted = false; setPreview(false); } }).observe(preview);
   motion.addEventListener('change', () => syncPreview());
   mobilePreviews.addEventListener('change', () => syncPreview());
   document.addEventListener('visibilitychange', () => syncPreview());

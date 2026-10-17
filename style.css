@@ -231,6 +231,7 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 .scroll-preview:is(.is-open,:focus-visible) .device-mockup{transform:perspective(1100px) rotateX(4deg) rotateY(-3deg) rotateZ(-1deg)}
 .project-mbl .scroll-preview:is(.is-open,:focus-visible) .device-mockup{transform:perspective(1100px) rotateX(4deg) rotateY(3deg) rotateZ(1deg)}
 .project-cover~.project-open{z-index:3}
+.scroll-preview.is-resetting .preview-reel,.scroll-preview.is-resetting .preview-reel img{animation-play-state:paused!important;transition:none}
 @media(max-width:700px){
  .project-cover{padding:23px}
  .cover-kicker,.cover-footer{font-size:8px;letter-spacing:.06em}
