@@ -84,9 +84,34 @@ if (host) {
     const label=new THREE.Mesh(labelGeometry,labelMaterial);label.position.set(0,-.43,.327);key.add(label);
 
     let frame=0,last=0,elapsed=0,visible=false,lost=false,disposed=false,draws=0;
+    const pointer=new THREE.Vector2(99,99),offset=new THREE.Vector2(),velocity=new THREE.Vector2();
+    let pointerInside=false,baseX=0,limitX=.75,limitY=.38;
+    function pointerMove(event){
+      if(event.pointerType!=='mouse'||reduced.matches||!visible||disposed)return;
+      const rect=host.getBoundingClientRect();
+      const halfHeight=Math.tan(camera.fov*Math.PI/360)*camera.position.z;
+      pointer.set(((event.clientX-rect.left)/rect.width*2-1)*halfHeight*camera.aspect,-((event.clientY-rect.top)/rect.height*2-1)*halfHeight);
+      pointerInside=true;
+    }
+    function pointerLeave(){pointerInside=false;}
+    card.addEventListener('pointermove',pointerMove,{passive:true});
+    card.addEventListener('pointerleave',pointerLeave);
+    function advance(dt){
+      // A damped spring returns the key to its pose after a gentle cursor push.
+      const dx=baseX+offset.x-pointer.x,dy=offset.y-pointer.y;
+      const distance=Math.hypot(dx,dy),radius=1.7;
+      const force=pointerInside?Math.max(0,1-distance/radius)*10:0;
+      const direction=distance>.001?1/distance:0;
+      velocity.x+=((direction?dx*direction:1)*force-offset.x*12-velocity.x*4.5)*dt;
+      velocity.y+=(dy*direction*force-offset.y*12-velocity.y*4.5)*dt;
+      offset.addScaledVector(velocity,dt);
+      for(const [axis,limit] of [['x',limitX],['y',limitY]]){
+        if(Math.abs(offset[axis])>limit){offset[axis]=Math.sign(offset[axis])*limit;velocity[axis]*=-.5;}
+      }
+    }
     function pose() {
-      key.rotation.set(-.58+Math.sin(elapsed*.55)*.07, -.38+Math.sin(elapsed*.42)*.22, .35+Math.cos(elapsed*.36)*.04);
-      key.position.y=Math.sin(elapsed*.5)*.045;
+      key.rotation.set(-.58+Math.sin(elapsed*.55)*.07+offset.y*.14, -.38+Math.sin(elapsed*.42)*.22+offset.x*.18, .35+Math.cos(elapsed*.36)*.04-offset.x*.05);
+      key.position.set(baseX+offset.x,Math.sin(elapsed*.5)*.045+offset.y,0);
     }
     function draw() {
       if (disposed || lost || document.hidden) return;
@@ -96,10 +121,14 @@ if (host) {
     function tick(now) {
       frame=0;
       if (!visible || document.hidden || reduced.matches || lost || disposed) return;
-      if(now-last>=1000/30-1){elapsed+=Math.min((now-last)/1000,.05);last=now;draw();}
+      const dt=Math.min((now-last)/1000,.05);last=now;elapsed+=dt;
+      // Small physics steps stay stable after an irregular display refresh.
+      const steps=Math.max(1,Math.ceil(dt/(1/120)));
+      for(let i=0;i<steps;i++)advance(dt/steps);
+      draw();
       frame=requestAnimationFrame(tick);
     }
-    function stop(){cancelAnimationFrame(frame);frame=0;host.dataset.rendering='idle';}
+    function stop(){cancelAnimationFrame(frame);frame=0;pointerInside=false;host.dataset.rendering='idle';}
     function sync(){
       const rect=card.getBoundingClientRect(),next=card.nextElementSibling?.getBoundingClientRect();
       visible=rect.bottom>0&&rect.top<innerHeight&&(!next||next.top>Math.max(rect.top,0)+60);
@@ -111,22 +140,27 @@ if (host) {
       renderer.setSize(width,height,false);camera.aspect=width/height;camera.updateProjectionMatrix();
       const mobile=width<600;
       key.scale.setScalar(mobile?.62:1.13);
-      key.position.x=mobile?0:camera.aspect*.26;
+      baseX=mobile?0:camera.aspect*.26;
+      const halfHeight=Math.tan(camera.fov*Math.PI/360)*camera.position.z;
+      limitX=Math.min(.75,Math.max(.08,halfHeight*camera.aspect-Math.abs(baseX)-1.65*key.scale.x));
+      limitY=Math.min(.38,Math.max(.08,halfHeight-1.7*key.scale.x));
+      offset.x=THREE.MathUtils.clamp(offset.x,-limitX,limitX);offset.y=THREE.MathUtils.clamp(offset.y,-limitY,limitY);
+      pointerInside=false;
       draw();sync();
     }
     const ro=new ResizeObserver(resize);ro.observe(host);
     const io=new IntersectionObserver(sync);io.observe(card);
     addEventListener('scroll',sync,{passive:true});
     document.addEventListener('visibilitychange',()=>{if(!document.hidden&&reduced.matches)draw();sync();});
-    reduced.addEventListener('change',()=>{draw();sync();});
+    reduced.addEventListener('change',()=>{pointerInside=false;offset.set(0,0);velocity.set(0,0);draw();sync();});
     canvas.addEventListener('webglcontextlost',e=>{e.preventDefault();lost=true;stop();host.classList.remove('is-ready');});
     canvas.addEventListener('webglcontextrestored',()=>{lost=false;resize();});
     addEventListener('pagehide',event=>{
-      stop();if(event.persisted)return;disposed=true;ro.disconnect();io.disconnect();
+      stop();if(event.persisted)return;disposed=true;ro.disconnect();io.disconnect();card.removeEventListener('pointermove',pointerMove);card.removeEventListener('pointerleave',pointerLeave);
       geometry.dispose();chrome.dispose();top.dispose();labelGeometry.dispose();labelMaterial.dispose();labelTexture.dispose();environment.dispose();renderer.dispose();
     });
     addEventListener('pageshow',()=>sync());
-    host.dataset.triangles=String(indices.length/3+2);host.dataset.maxFps='30';
+    host.dataset.triangles=String(indices.length/3+2);host.dataset.maxFps='display';
     resize();
   }
 }

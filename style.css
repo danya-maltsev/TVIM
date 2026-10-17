@@ -190,22 +190,12 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 .founder-name{font-size:14px;font-weight:600;line-height:1.45}
 .founder-role{font-size:12px;line-height:1.5;color:var(--muted);margin-top:3px}
 .studio-copy>.founder-note{font-size:13px;line-height:1.65;letter-spacing:0;color:var(--muted);margin-top:14px}
-.contact-action,.footer-grid{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);column-gap:8%}
-.footer-grid{padding:48px var(--pad) 24px;row-gap:42px;align-items:start}
-.footer-grid .foot-brand,.footer-grid .foot-contact{padding:0;min-height:0}
-.foot-contact{gap:12px}
-.foot-contact .foot-label{margin:0 0 8px}
-.foot-bottom{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(300px,1fr);column-gap:8%;padding:24px 0 0;border-top:1px solid var(--line);align-items:center}
-.foot-bottom>span:nth-child(2){margin-left:0;width:auto;order:0;text-align:left}
 @media(max-width:700px){
- .contact-action,.footer-grid,.foot-bottom{grid-template-columns:minmax(0,1fr)}
- .footer-grid{padding:38px var(--pad) 24px;row-gap:32px}
- .foot-contact{align-items:flex-start}
- .foot-label{font-size:11px}
- .foot-contact>a{font-size:13px}
- .foot-bottom{row-gap:10px}
- .foot-bottom>span:nth-child(2){width:auto;text-align:left}
  .founder-signature{gap:12px}
  .founder-name{font-size:13px}
  .founder-role{font-size:11px}
 }
+
+/* Bare social icons retain a generous click target. */
+.social-links>a,.social-links>button{border:0;border-radius:0;background:transparent}
+.social-links>a:hover,.social-links>button:hover{background:transparent;color:var(--blue);transform:translateY(-2px)}

@@ -10,7 +10,7 @@ try {
   renderer.setPixelRatio(Math.min(devicePixelRatio,coarse.matches?1.5:1.75));
   renderer.setClearColor(0xf5f5f7,0);
   renderer.toneMapping=THREE.ACESFilmicToneMapping;
-  renderer.toneMappingExposure=1;
+  renderer.toneMappingExposure=1.06;
   const scene=new THREE.Scene();
   const camera=new THREE.PerspectiveCamera(34,1,.1,50);camera.position.set(0,0,9);
   const pmrem=new THREE.PMREMGenerator(renderer);
@@ -18,7 +18,7 @@ try {
   const environment=pmrem.fromScene(room,.025);
   scene.environment=environment.texture;
   room.dispose();pmrem.dispose();
-  scene.add(new THREE.HemisphereLight(0xffffff,0x64627d,.3));
+  scene.add(new THREE.HemisphereLight(0xffffff,0x777989,.36));
   const light=new THREE.DirectionalLight(0xffffff,1.2);light.position.set(-3,5,5);scene.add(light);
   const fill=new THREE.DirectionalLight(0xa6a3ff,.7);fill.position.set(4,-2,3);scene.add(fill);
   // Physical transmission and thick coloured glass, sharing the existing environment.

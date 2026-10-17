@@ -34,6 +34,7 @@
 .photo-character{background:#000}
 .photo-character:before{background:linear-gradient(90deg,#0009,transparent 65%);pointer-events:none}
 .keycap-scene{position:absolute;inset:0;z-index:-2;pointer-events:none}
+.keycap-scene:after{content:'';position:absolute;inset:0;background:rgba(0,0,0,.3);pointer-events:none}
 .keycap-canvas{display:block;width:100%;height:100%;opacity:0}
 .keycap-fallback{position:absolute;width:100%;height:145%;left:0;top:-22.5%;object-fit:contain}
 .keycap-scene.is-ready .keycap-canvas{opacity:1}
