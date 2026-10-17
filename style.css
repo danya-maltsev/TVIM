@@ -207,12 +207,12 @@ a:is(:hover,:focus-visible) .arrow-motion .arrow-second{transform:translate(0,0)
 .cover-favn{color:#24202d;background:radial-gradient(ellipse at 18% 10%,#f8e9dc 0,transparent 53%),radial-gradient(ellipse at 90% 94%,#a8a0ef 0,transparent 62%),linear-gradient(130deg,#e8e1ed,#d0c9e7)}
 .cover-favn:before{content:'';position:absolute;width:140%;height:42%;left:-20%;top:20%;transform:rotate(-32deg);background:linear-gradient(180deg,#ffffff00,#ffffff6b,#ffffff00);pointer-events:none}
 .cover-kicker,.cover-footer{font-size:9px;line-height:1.5;letter-spacing:.1em;text-transform:uppercase;position:relative;z-index:1}
-.cover-logo-favn{width:68%;max-width:370px;height:auto;object-fit:contain;align-self:center;position:relative;z-index:1}
+.cover-logo-favn{margin-block:auto;width:68%;max-width:370px;height:auto;object-fit:contain;align-self:center;position:relative;z-index:1}
 .cover-footer{display:flex;align-items:end;justify-content:space-between;gap:20px}
 .cover-cue{opacity:.65;text-align:right}
 .cover-mbl{color:#f3eee8;background:radial-gradient(ellipse 80% 110% at 90% 5%,#756958 0%,#333337 38%,#17191f 78%)}
 .cover-mbl:before{content:'';position:absolute;inset:0;background:linear-gradient(118deg,transparent 36%,#ffffff10 36.2%,transparent 60%)}
-.cover-wordmark{position:relative;z-index:1;align-self:center;text-align:center;font-size:clamp(70px,9vw,145px);font-weight:700;line-height:1;letter-spacing:-.07em}
+.cover-wordmark{margin-block:auto;position:relative;z-index:1;align-self:center;text-align:center;font-size:clamp(70px,9vw,145px);font-weight:700;line-height:1;letter-spacing:-.07em}
 .cover-wordmark>span{display:block;font-size:10px;font-weight:400;line-height:1.5;letter-spacing:.22em;text-transform:uppercase;margin-top:18px}
 .mockup-stage{position:absolute;inset:0;overflow:hidden;background:radial-gradient(ellipse at 25% 0%,#f3ede2 0%,#d0c6d2 50%,#938899 100%);perspective:1100px}
 .mockup-stage:before{content:'';position:absolute;inset:0;background:linear-gradient(120deg,#fff6 0,transparent 40%,#fff1 70%,transparent);pointer-events:none}

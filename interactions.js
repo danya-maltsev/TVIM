@@ -61,25 +61,16 @@ new IntersectionObserver(entries => { heroVisible = entries[0].isIntersecting; i
 document.addEventListener('visibilitychange', () => { if (document.hidden) clearTimeout(timer); else schedule(); });
 motion.addEventListener('change', resetType);
 schedule();
-document.querySelectorAll('.scroll-preview').forEach((preview, index) => {
-  const previewButton = document.createElement('button');
-  previewButton.type = 'button'; previewButton.className = 'preview-toggle';
-  previewButton.textContent = '▷ Смотреть превью'; previewButton.setAttribute('aria-pressed','false');
-  preview.id = `project-preview-${index}`;
-  previewButton.setAttribute('aria-controls', preview.id);
-  preview.after(previewButton);
+document.querySelectorAll('.scroll-preview').forEach(preview => {
   function setPreview(on) {
     const playing = on && !motion.matches;
     preview.classList.toggle('is-open', on);
     preview.classList.toggle('is-playing', playing);
-    previewButton.textContent = on ? '× Скрыть превью' : '▷ Смотреть превью';
-    previewButton.setAttribute('aria-pressed', String(on));
   }
   preview.addEventListener('pointerenter', e => { if (e.pointerType === 'mouse') setPreview(true); });
   preview.addEventListener('pointerleave', e => { if (e.pointerType === 'mouse') setPreview(false); });
   preview.addEventListener('focus', () => { if (preview.matches(':focus-visible')) setPreview(true); });
   preview.addEventListener('blur', () => setPreview(false));
-  previewButton.addEventListener('click', () => setPreview(!preview.classList.contains('is-open')));
   new IntersectionObserver(entries => { if (!entries[0].isIntersecting) setPreview(false); }).observe(preview);
   motion.addEventListener('change', () => setPreview(false));
   document.addEventListener('visibilitychange', () => { if (document.hidden) setPreview(false); });
