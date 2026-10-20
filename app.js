@@ -57,9 +57,14 @@ try {
   function resize(){stop();rect=host.getBoundingClientRect();if(!rect.width||!rect.height)return;const wide=innerWidth>700;
     const sceneWidth=wide?rect.width*(innerWidth<=1100?.60:innerWidth>=1900?.50:.56):rect.width;
     const sceneLeft=wide?rect.width-sceneWidth+(innerWidth<=1100?0:innerWidth>=1900?-rect.width*.05:rect.width*.03):0;
-    camera.position.z=wide?9:8.4;camera.aspect=sceneWidth/rect.height;
+    camera.position.z=wide?9:8.4;camera.fov=wide?34:38;camera.aspect=sceneWidth/rect.height;
     if(wide)camera.setViewOffset(sceneWidth,rect.height,-sceneLeft,0,rect.width,rect.height);else camera.clearViewOffset();
-    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);root.scale.setScalar(wide?(sceneWidth<600?.84:1):Math.min(1.26,(2*8.4*Math.tan(17*Math.PI/180)*camera.aspect)/4.65));root.position.set(wide?0:-.06,wide?0:-.08,0);if(ready)draw(performance.now());}
+    camera.updateProjectionMatrix();renderer.setSize(rect.width,rect.height,false);
+    // Fit both dimensions, reserving room for the foreground shapes and finger movement.
+    const visibleHeight=2*camera.position.z*Math.tan(camera.fov*Math.PI/360);
+    const mobileScale=Math.min(1.02,visibleHeight/5.9,visibleHeight*camera.aspect/5.25);
+    root.scale.setScalar(wide?(sceneWidth<600?.84:1):mobileScale);
+    root.position.set(wide?0:-.06,wide?0:-.08,0);if(ready)draw(performance.now());}
   function draw(now){
     frame=0;if(!ready||disposed||contextLost)return;
     // Render on every display refresh. A fixed 60/30 FPS gate skipped frames
@@ -77,7 +82,7 @@ try {
     }
     items.forEach((item,i)=>{
       const dx=item.mesh.position.x-pointerWorld.x,dy=item.mesh.position.y-pointerWorld.y;
-      const distance=Math.sqrt(dx*dx+dy*dy),strength=inside&&!paused&&touchPointer===null?Math.max(0,1-distance/2.1)*1.25:0;
+      const distance=Math.sqrt(dx*dx+dy*dy),strength=inside&&!paused&&touchPointer===null?Math.max(0,1-distance/2.1)*(innerWidth>700?1.25:.45):0;
       const targetX=item===dragItem?touchTarget.x:distance>.001?dx/distance*strength:0,targetY=item===dragItem?touchTarget.y:distance>.001?dy/distance*strength:0;
       const blend=1-Math.exp(-dt*7);
       if(Math.abs(targetX-item.offset.x)+Math.abs(targetY-item.offset.y)>.0001)changing=true;

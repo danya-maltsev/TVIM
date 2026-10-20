@@ -3,6 +3,7 @@
   if (!gallery) return;
   const header = document.querySelector('.nav');
   const posters = [...gallery.querySelectorAll('.process-poster')];
+  const surfaces = [...document.querySelectorAll('[data-header-theme]')];
   const reduced = matchMedia('(prefers-reduced-motion: reduce)');
   let frame = 0;
   function render() {
@@ -10,7 +11,11 @@
     const region = gallery.getBoundingClientRect();
     const nav = header.getBoundingClientRect();
     const navCentre = nav.top + nav.height / 2;
-    header.classList.toggle('is-on-dark', region.top <= navCentre && region.bottom > navCentre);
+    const surface = surfaces.filter(element => {
+      const rect = element.getBoundingClientRect();
+      return rect.top <= navCentre && rect.bottom > navCentre;
+    }).at(-1);
+    header.classList.toggle('is-on-dark', surface?.dataset.headerTheme === 'dark');
     if (region.bottom < 0 || region.top > innerHeight) return;
     const top = parseFloat(getComputedStyle(gallery).getPropertyValue('--poster-top')) || 112;
     const stacking = !reduced.matches && innerHeight > 650;
