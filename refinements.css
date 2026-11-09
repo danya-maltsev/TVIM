@@ -81,32 +81,58 @@
 /* Result markers belong to the card headings, not the actions. */
 .poster-heading{display:flex;flex-direction:column;align-items:flex-start;gap:22px}
 .poster-heading .poster-outcome{display:flex;align-items:center;gap:10px;font-size:14px;line-height:1.4;font-weight:400;color:#ffffffe0}
-.poster-outcome>span{display:grid;place-items:center;flex:none;width:30px;height:30px;border-radius:50%;background:#ffffff24;font-size:11px;font-variant-numeric:tabular-nums}
-.process-gallery{padding-bottom:64px}
-.process-summary{position:relative;margin-top:38px;padding:44px;border-radius:24px;background:#fff;color:var(--ink)}
-.process-summary h2{font-size:clamp(32px,3.4vw,52px);line-height:1.1;letter-spacing:-.05em;font-weight:500}
-.process-results{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin:40px 0 0;padding:0}
-.process-results li{border-top:1px solid var(--line);padding-top:20px;min-width:0}
-.result-number{display:block;color:var(--blue);font-size:12px;margin-bottom:25px;font-variant-numeric:tabular-nums}
-.process-results h3{font-size:clamp(20px,1.8vw,27px);font-weight:500;letter-spacing:-.04em;line-height:1.25;margin-bottom:14px}
-.process-results p{font-size:14px;color:var(--muted);line-height:1.65;max-width:270px}
-.contact.contact-action{background:#19191c;color:#f5f5f7;border-radius:0;margin-top:0;padding-top:35px;padding-bottom:140px}
+.poster-outcome>span{flex:none;padding-right:10px;border-right:1px solid #ffffff50;color:#ffffffb3;font-variant-numeric:tabular-nums}
+
+.process-gallery{padding-bottom:72px}
+.process-summary h2{font-size:clamp(32px,3.4vw,52px);line-height:1.1;letter-spacing:-.05em;font-weight:500;color:#ffffffd9}
+.process-results{list-style:none;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:28px;margin:28px 0 0;padding:0}
+.process-results li{border-top:1px solid #ffffff2e;padding-top:16px;min-width:0}
+.process-results h3{font-size:clamp(20px,1.8vw,27px);font-weight:500;letter-spacing:-.04em;line-height:1.25;margin-bottom:10px;color:#ffffffe8}
+.process-results p{font-size:14px;color:#ffffffa6;line-height:1.65;max-width:270px}
+
+.contact.contact-action{
+ position:relative;
+ isolation:isolate;
+ overflow:clip;
+ background:radial-gradient(ellipse at 72% 66%,#312861 0,transparent 63%),#201d2c;
+ color:#f5f5f7;
+ border-radius:0;
+ margin-top:0;
+ padding-top:72px;
+ padding-bottom:140px;
+}
+.contact-orbit{
+ position:absolute;
+ z-index:-1;
+ pointer-events:none;
+ width:clamp(580px,65vw,950px);
+ height:auto;
+ right:1%;
+ top:54%;
+ transform:translateY(-50%);
+}
+@media(prefers-reduced-motion:no-preference){
+ .contact-orbit{animation:contact-orbit-drift 18s ease-in-out infinite alternate}
+}
+@keyframes contact-orbit-drift{
+ from{transform:translateY(-50%) rotate(-4deg)}
+ to{transform:translateY(-54%) rotate(5deg)}
+}
 .contact-action .contact-side>p{color:#aaaab0}
-@media(max-width:1000px){.process-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:30px}.process-summary{padding:34px}}
+@media(max-width:1000px){.process-results{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}}
 @media(max-width:700px){
  .hero .scene{height:clamp(390px,110vw,600px);margin-top:12px}
  .hero-copy{z-index:6}
  .poster-heading{gap:20px}
  .poster-heading .poster-outcome{font-size:12px;gap:9px}
- .poster-outcome>span{width:27px;height:27px;font-size:10px}
- .process-gallery{padding-bottom:34px}
- .process-summary{margin-top:20px;padding:27px 24px;border-radius:22px}
+ .poster-outcome>span{padding-right:9px}
+ .process-gallery{padding-bottom:48px}
  .process-summary h2{font-size:34px}
- .process-results{grid-template-columns:1fr;gap:24px;margin-top:30px}
- .process-results li{display:grid;grid-template-columns:25px 1fr;column-gap:12px;padding-top:19px}
- .result-number{margin:4px 0 0;font-size:11px}
- .process-results h3{font-size:22px;margin-bottom:9px}
- .process-results p{grid-column:2;font-size:13px}
- .contact.contact-action{padding-top:30px;padding-bottom:105px}
+ .process-results{grid-template-columns:1fr;gap:18px;margin-top:22px}
+ .process-results li{padding-top:13px}
+ .process-results h3{font-size:21px;margin-bottom:6px}
+ .process-results p{font-size:13px}
+ .contact.contact-action{padding-top:46px;padding-bottom:105px}
+ .contact-orbit{width:128%;right:-33%;top:56%;opacity:.65}
 }
 @media(prefers-reduced-motion:reduce){.scroll-preview:is(.is-playing,:focus-visible) .site-reel img{animation:none}}
